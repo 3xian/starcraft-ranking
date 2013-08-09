@@ -4,6 +4,7 @@
 		<title>酷客</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link rel="stylesheet" type="text/css" href="{{static_url('css/bootstrap.min.css')}}" >
+		<link rel="stylesheet" type="text/css" href="{{static_url('css/bootstrap-glyphicons.css')}}" >
 		<link rel="stylesheet" type="text/css" href="{{static_url('css/style.css')}}" >
 	</head>
 
@@ -14,13 +15,14 @@
 				<div class="nav-collapse collapse">
 					<ul class="nav navbar-nav kuke-nav">
 						<li class="dropdown">
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown">最新 <b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle glyphicon glyphicon-screenshot kuke-glyphicon" data-toggle="dropdown"> 最新 <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="/things?sort=hot">最热</a></li>
-							<li><a href="/things?sort=favor">最赞</a></li>
+							<li><a href="/things?sort=hot" class="glyphicon glyphicon-fire kuke-glyphicon"> 最热</a></li>
+							<li><a href="/things?sort=favor" class="glyphicon glyphicon-thumbs-up kuke-glyphicon"> 最赞</a></li>
 						</ul>
 						</li>
-						<li><a href="/things/collection">收集</a></li>
+						<li><a href="/things/collection">收藏</a></li>
+						<li><a href="/things/collection">收藏</a></li>
 						<li><a href="/things/new">发布</a></li>
 					</ul>
 					<ul class="nav navbar-nav pull-right kuke-nav">

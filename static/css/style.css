@@ -18,25 +18,25 @@ body {
 	letter-spacing: 1px;
 	text-decoration: none;
 }
-.kuke-nav > li {
+.kuke-nav>li {
 	border-left: 1px solid #343944;
 }
-.kuke-nav > li :hover {
+.kuke-nav>li:hover {
 	background: -webkit-linear-gradient(top,#4F555F,#414751);
 	background: -moz-linear-gradient(top,#4F555F,#414751);
 	background: -o-linear-gradient(top,#4F555F,#414751);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4f555f',endColorstr='#414751');
 	background-image: -ms-linear-gradient(#4F555F,#414751);
 }
-.kuke-nav > li > a {
+.kuke-nav>li>a {
 	padding-top: 10px;
 	padding-bottom: 10px;
 	color: #c4c7cc;
 }
-.kuke-nav > li > a:hover {
+.kuke-nav>li>a:hover {
 	color: #FFF;
 }
-.kuke-nav > li > a:focus {
+.kuke-nav>li>a:focus {
 	color: #c4c7cc;
 }
 .kuke-nav>.dropdown>a:hover .caret {
@@ -64,6 +64,9 @@ body {
 }
 .kuke-form-control {
 	height: 25px;
+}
+.kuke-glyphicon:before {
+	vertical-align: text-top;
 }
 ul.nav li.dropdown:hover ul.dropdown-menu {
 	display: block;    

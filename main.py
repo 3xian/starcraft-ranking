@@ -21,6 +21,7 @@ class Application(tornado.web.Application):
         handlers = [
             (r'/', HomeHandler),
             (r'/auth', AuthHandler),
+            (r'/test', TestHandler),
             #(r'/admin', AdminHandler),
             #(r'/admin/login', AdminLoginHandler),
             #(r'/login', LoginHandler),
@@ -54,6 +55,10 @@ class AuthHandler(base.BaseHandler, auth.WeiboMixin):
                 client_secret=self.settings['weibo_api_secret'],
                 code=self.get_argument('code'))
             self.redirect('/')
+
+class TestHandler(base.BaseHandler):
+    def get(self):
+        self.render('test.html')
 
 def main():
     tornado.options.parse_config_file('./kuke.conf')
