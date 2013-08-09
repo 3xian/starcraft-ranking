@@ -66,6 +66,8 @@ body {
 	height: 25px;
 }
 .kuke-glyphicon:before {
+	font-size: 12px;
+	line-height: 17px;
 	vertical-align: text-top;
 }
 ul.nav li.dropdown:hover ul.dropdown-menu {
