@@ -27,11 +27,8 @@ class Application(tornado.web.Application):
             ('/users/auth/weibo', AuthWeiboHandler),
             ('/things', ThingsHandler),
             ('/things/new', ThingsNewHandler),
+            ('/users/messages', UsersMessagesHandler),
             ('/users/logout', UsersLogoutHandler),
-            #('/admin', AdminHandler),
-            #('/admin/login', AdminLoginHandler),
-            #('/login', LoginHandler),
-            #('/logout', LogoutHandler),
             ('/test', TestHandler),
         ]
         settings = dict(
@@ -56,11 +53,7 @@ class ThingsHandler(base.BaseHandler):
         return sort_type
 
     def get(self):
-        uid = self.get_current_user()
-        if uid:
-            user = self.db.users.find_one({'uid':uid})
-        else:
-            user = ''
+        user = self.get_current_user()
         self.render('things.html',
                     sort_type=self.get_sort_type(),
                     user=user)
@@ -68,7 +61,8 @@ class ThingsHandler(base.BaseHandler):
 class ThingsNewHandler(base.BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        pass
+        self.render('things_new.html',
+                    user=self.current_user)
 
 class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
     @tornado.web.asynchronous
@@ -96,6 +90,12 @@ class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
             self.set_secure_cookie('uid', uid)
         else:
             logging.warning('login failed')
+        self.redirect('/')
+
+class UsersMessagesHandler(base.BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        # TODO
         self.redirect('/')
 
 class UsersLogoutHandler(base.BaseHandler):

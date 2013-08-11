@@ -17,5 +17,7 @@ class BaseHandler(tornado.web.RequestHandler):
         return os.path.join(self.settings['static_path'], subdir)
 
     def get_current_user(self):
-        return self.get_secure_cookie('uid')
-
+        uid = self.get_secure_cookie('uid')
+        if not uid:
+            return None
+        return self.db.users.find_one({'uid':uid})
