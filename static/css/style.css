@@ -1,6 +1,9 @@
 body {
 	background: #eef0f3;
 }
+.kuke-hand {
+	cursor: pointer;
+}
 .kuke-navbar {
 	min-height: 0px;
 	border-bottom: 1px solid #262932;
@@ -64,16 +67,25 @@ body {
 }
 .kuke-form-control {
 	height: 25px;
+	border-radius: 3px;
 }
 .kuke-glyphicon:before {
 	font-size: 12px;
-	line-height: 17px;
+	line-height: 16px;
 	vertical-align: text-top;
+	margin-right: 2px;
 }
 .kuke-icon {
 	width: 60px;
 	margin-left: 5px;
 	margin-right: 5px;
+}
+.kuke-nav-img {
+	width: 21px;
+	margin-top: -2px;
+	margin-left: 5px;
+	margin-right: 5px;
+	box-shadow: 0 0 2px #000;
 }
 ul.nav li.dropdown:hover ul.dropdown-menu {
 	display: block;    

@@ -3,6 +3,7 @@
 import logging
 import os
 
+import pymongo
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
@@ -13,48 +14,95 @@ from tornado.options import define, options
 import base
 import auth
 
-define("local_host")
-define("port", default=80, help="run on the given port", type=int)
+define('host')
+define('port', default=80, type=int)
+define('domain')
+define('weibo_api_key')
+define('weibo_api_secret')
 
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
-            (r'/', HomeHandler),
-            (r'/auth', AuthHandler),
-            (r'/test', TestHandler),
-            #(r'/admin', AdminHandler),
-            #(r'/admin/login', AdminLoginHandler),
-            #(r'/login', LoginHandler),
-            #(r'/logout', LogoutHandler),
+            ('/', ThingsHandler),
+            ('/users/auth/weibo', AuthWeiboHandler),
+            ('/things', ThingsHandler),
+            ('/things/new', ThingsNewHandler),
+            ('/users/logout', UsersLogoutHandler),
+            #('/admin', AdminHandler),
+            #('/admin/login', AdminLoginHandler),
+            #('/login', LoginHandler),
+            #('/logout', LogoutHandler),
+            ('/test', TestHandler),
         ]
         settings = dict(
             template_path=os.path.join(os.getcwd(), 'templates'),
             static_path=os.path.join(os.getcwd(), 'static'),
             xsrf_cookies=False,
-            cookie_secret="__WhatColorIsThat?!__",
-            login_url="/login",
+            cookie_secret='__WhatColorIsThat?!__',
+            login_url='/',
             debug=False,
             static_handler_class=base.SmartStaticFileHandler,
-            weibo_api_key='277552994',
-            weibo_api_secret='065159860517012fd61c4efd25ff89d6',
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
-class HomeHandler(base.BaseHandler):
-    def get(self):
-        self.render('home.html')
+        self.db = pymongo.MongoClient().kuke
 
-class AuthHandler(base.BaseHandler, auth.WeiboMixin):
-    @tornado.web.asynchronous
-    @tornado.gen.coroutine
+class ThingsHandler(base.BaseHandler):
+    def get_sort_type(self):
+        sort_type = self.get_argument('sort', 'None')
+        sort_types = ['time', 'hot', 'favor']
+        if sort_type not in sort_types:
+            sort_type = 'time'
+        return sort_type
+
     def get(self):
-        if self.get_argument('code', None):
-            user = yield self.get_authenticated_user(
-                redirect_uri='/',
-                client_id=self.settings['weibo_api_key'],
-                client_secret=self.settings['weibo_api_secret'],
-                code=self.get_argument('code'))
-            self.redirect('/')
+        uid = self.get_current_user()
+        if uid:
+            user = self.db.users.find_one({'uid':uid})
+        else:
+            user = ''
+        self.render('things.html',
+                    sort_type=self.get_sort_type(),
+                    user=user)
+
+class ThingsNewHandler(base.BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        pass
+
+class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
+    @tornado.web.asynchronous
+    def get(self):
+        return_code = self.get_argument('code', None)
+        redirect_uri = '%s/users/auth/weibo' % options.domain
+        if return_code:
+            logging.info('weibo auth code: %s', return_code)
+            self.get_authenticated_user(redirect_uri=redirect_uri,
+                                        client_id=options.weibo_api_key,
+                                        client_secret=options.weibo_api_secret,
+                                        code=return_code,
+                                        callback=self._on_login)
+        else:
+            self.authorize_redirect(redirect_uri=redirect_uri,
+                                    client_id=options.weibo_api_key)
+
+    def _on_login(self, login_info):
+        if login_info:
+            logging.info('login success: %s', login_info)
+            uid = 'weibo$%d' % login_info['id']
+            self.db.users.update({'uid':uid},
+                                 {'uid':uid, 'name':login_info['screen_name'], 'img_url':login_info['profile_image_url']},
+                                 True)
+            self.set_secure_cookie('uid', uid)
+        else:
+            logging.warning('login failed')
+        self.redirect('/')
+
+class UsersLogoutHandler(base.BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        self.clear_cookie('uid')
+        self.redirect('/')
 
 class TestHandler(base.BaseHandler):
     def get(self):
@@ -67,5 +115,5 @@ def main():
     logging.info('============ [ KuKe server START! ] ============')
     tornado.ioloop.IOLoop.instance().start()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
