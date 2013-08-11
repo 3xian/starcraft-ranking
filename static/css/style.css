@@ -87,6 +87,13 @@ body {
 	margin-right: 5px;
 	box-shadow: 0 0 2px #000;
 }
+.kuke-white-board {
+	margin-top: 70px;
+	padding: 20px;
+	background: #fff;
+	box-shadow: 0 0 3px 1px rgba(0,0,0,.05),0 1px 2px 0px rgba(0,0,0,.1);
+	border-radius: 3px;
+}
 ul.nav li.dropdown:hover ul.dropdown-menu {
 	display: block;    
 }

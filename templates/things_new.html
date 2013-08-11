@@ -55,24 +55,11 @@
 			</div>
 		</div>
 
-		{% if not user %}
-		<div class="modal fade" id="loginModal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">登录</h4>
-					</div>
-					<div class="modal-body">
-					<div class="well">
-						<a href="/users/auth/weibo"><img src="{{static_url('img/icon-weibo.png')}}" class="img-responsive tips-sw kuke-icon kuke-hand" original-title="微博账号" id="loginWeibo"></a>
-						<img src="{{static_url('img/icon-taobao.png')}}" class="img-responsive tips-sw kuke-icon" original-title="淘宝账号">
-					</div>
-					</div>
-				</div>
+		<div class="container">
+			<div class="kuke-white-board">
+			发布产品
 			</div>
 		</div>
-		{% end %}
 
 		<script type="text/javascript" src="{{static_url('js/jquery.js')}}"></script>
 		<script type="text/javascript" src="{{static_url('js/jquery.tipsy.js')}}"></script>
