@@ -1,0 +1,7 @@
+Keke Website
+
+[Deployment Need]
+	python (2.7)
+	pymongo (2.5.2)
+	tornado (3.1)
+	mongodb
