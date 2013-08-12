@@ -21,3 +21,8 @@ class BaseHandler(tornado.web.RequestHandler):
         if not uid:
             return None
         return self.db.users.find_one({'uid':uid})
+
+    def render_extend(self, template_name, user=None, sort_type=None, **args):
+        if not user:
+            user = self.current_user
+        self.render(template_name, user=user, sort_type=sort_type, **args)

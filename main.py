@@ -27,6 +27,7 @@ class Application(tornado.web.Application):
             ('/users/auth/weibo', AuthWeiboHandler),
             ('/things', ThingsHandler),
             ('/things/new', ThingsNewHandler),
+            ('/things/image-upload', ThingsImageUploadHandler),
             ('/users/messages', UsersMessagesHandler),
             ('/users/logout', UsersLogoutHandler),
             ('/test', TestHandler),
@@ -61,8 +62,12 @@ class ThingsHandler(base.BaseHandler):
 class ThingsNewHandler(base.BaseHandler):
     @tornado.web.authenticated
     def get(self):
-        self.render('things_new.html',
-                    user=self.current_user)
+        self.render_extend('things_new.html')
+
+class ThingsImageUploadHandler(base.BaseHandler):
+    @tornado.web.authenticated
+    def post(self):
+        self.write('ok')
 
 class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
     @tornado.web.asynchronous

@@ -1,69 +1,57 @@
-<html>
-	<head>
-		<meta charset="utf-8">
-		<title>发布产品 - 酷客</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" type="text/css" href="{{static_url('css/bootstrap.min.css')}}" >
-		<link rel="stylesheet" type="text/css" href="{{static_url('css/bootstrap-glyphicons.css')}}" >
-		<link rel="stylesheet" type="text/css" href="{{static_url('css/tipsy.css')}}" >
-		<link rel="stylesheet" type="text/css" href="{{static_url('css/style.css')}}" >
-	</head>
+{% extends "base.html" %}
 
-	<body>
-		<div class="navbar navbar-fixed-top kuke-navbar">
-			<div class="container">
-				<a class="navbar-brand kuke-navbar-brand" href="/">酷客!</a>
-				<div class="nav-collapse collapse">
-					<ul class="nav navbar-nav kuke-nav">
-						<li class="dropdown">
-						<a href="/things" class="dropdown-toggle glyphicon glyphicon-refresh kuke-glyphicon" data-toggle="dropdown"> 最新 <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="/things?sort=hot" class="glyphicon glyphicon-fire kuke-glyphicon"> 最热</a></li>
-							<li><a href="/things?sort=favor" class="glyphicon glyphicon-thumbs-up kuke-glyphicon"> 最赞</a></li>
-						</ul>
-						</li>
-						{% if user %}
-						<li><a href="/things/collection">收藏</a></li>
-						<li><a href="/things/new">发布</a></li>
-						{% else %}
-						<li><a data-toggle="modal" href="#loginModal">收藏</a></li>
-						<li><a data-toggle="modal" href="#loginModal">发布</a></li>
-						{% end %}
-					</ul>
-					<ul class="nav navbar-nav pull-right kuke-nav">
-						<li>
-						<form class="navbar-form pull-left kuke-navbar-form" action="">
-							<input type="text" class="form-control kuke-form-control" placeholder="搜索">
-						</form>
-						</li>
-						{% if user %}
-						<li class="dropdown">
-						
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img
-							src="{{user['img_url']}}" class="img-responsive kuke-nav-img"> {{user['name']}} <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="/users/{{user['_id']}}" class="glyphicon glyphicon-user kuke-glyphicon"> 个人主页</a></li>
-							<li><a href="/users/messages" class="glyphicon glyphicon-envelope kuke-glyphicon"> 消息</a></li>
-							<li><a href="/users/logout" class="glyphicon glyphicon-remove-circle kuke-glyphicon"> 退出</a></li>
-						</ul>
-						</li>
-						{% else %}
-						<li><a data-toggle="modal" href="#loginModal">登录</a></li>
-						{% end %}
-					</ul>
-				</div><!--/.nav-collapse -->
-			</div>
+{% block title %}发布产品 - 酷客{% end %}
+
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{static_url('css/dropzone.css')}}" >
+<link rel="stylesheet" type="text/css" href="{{static_url('css/jquery.cleditor.css')}}" >
+{% end %}
+
+{% block content %}
+<div class="container">
+	<div class="kuke-white-board">
+		<div class="kuke-board-head">
+			<h3>发布产品</h3>
+			<p>感谢您分享您喜欢的新/奇/酷产品，一旦产品经过我们的编辑审核通过，将来有可能获得很大的优惠！</p>
 		</div>
-
-		<div class="container">
-			<div class="kuke-white-board">
-			发布产品
+		<form action="/things/new" class="form-horizontal" id="new_thing" method="post">
+			<div class="form-group">
+				<label class="col-lg-2 control-label" for="thing_title"><abbr title="required">*</abbr> 名称</label>
+				<div class="col-lg-6">
+					<input class="form-control" id="thing_title" maxlength="40" name="title" placeholder="真实准确的品牌型号，40字以内" required="required" size="100" type="text">
+				</div>
 			</div>
+			<div class="form-group">
+				<label class="col-lg-2 control-label" for="thing_subtitle">一句话介绍</label>
+				<div class="col-lg-6">
+					<input class="form-control" id="thing_subtitle" maxlength="40" name="subtitle" placeholder="您对产品的一句话介绍，40字以内" size="100" type="text" value="">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-lg-2 control-label" for="thing_official_site">官方链接</label>
+				<div class="col-lg-6">
+					<input class="form-control" id="thing_official_site" name="buylink" placeholder="品牌官方网站的该产品链接地址" size="100" type="url" value="">
+				</div>
+			</div>
+		</form>
+		<div class="kuke-dropzone">
+			<form action="/things/image-upload" class="dropzone" style="min-height:140px">
+				<div class="fallback">
+					<input name="file" type="file" multiple />
+				</div>
+			</form>
 		</div>
+		<div class="kuke-desc-textarea">
+			<textarea id="newThingDesc" name="new-thing-desc"></textarea>
+		</div>
+		<div>
+			<button class="btn btn-primary btn-lg" name="button" type="submit">提交产品</button>
+		</div>
+	</div>
+</div>
+{% end %}
 
-		<script type="text/javascript" src="{{static_url('js/jquery.js')}}"></script>
-		<script type="text/javascript" src="{{static_url('js/jquery.tipsy.js')}}"></script>
-		<script type="text/javascript" src="{{static_url('js/bootstrap.min.js')}}"></script>
-		<script type="text/javascript" src="{{static_url('js/script.js')}}"></script>
-	</body>
-</html>
+{% block scripts %}
+<script type="text/javascript" src="{{static_url('js/dz.js')}}"></script>
+<script type="text/javascript" src="{{static_url('js/jquery.cleditor.min.js')}}"></script>
+{% end %}

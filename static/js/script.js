@@ -1,17 +1,8 @@
 $(function() {
 	$(".tips-sw").tipsy({gravity: "sw"});
-	/*
-	$("#loginWeibo").click(function() {
-		$.get(
-			"https://api.weibo.com/oauth2/authorize",
-			{client_id:"277552994", redirect_uri:window.location.pathname},
-			function(data) {
-				console.log(data);
-			}
-		);
+	$("#newThingDesc").cleditor({
+		controls:
+			"style bold italic underline strikethrough | color highlight removeformat | " +
+			"link unlink image | bullets numbering indent outdent | undo redo"
 	});
-	$("#loginTaobao").click(function() {
-		// TODO
-	});
-	*/
 });
