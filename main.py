@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 import logging
 import os
 
@@ -67,7 +68,10 @@ class ThingsNewHandler(base.BaseHandler):
 class ThingsImageUploadHandler(base.BaseHandler):
     @tornado.web.authenticated
     def post(self):
-        self.write('ok')
+        image = self.request.files['file'][0]
+        ext = os.path.splitext(image['filename'])[1]
+        image_id = self.db.images.insert({'ext':ext, 'date':datetime.datetime.utcnow()})
+        self.write(str(image_id))
 
 class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
     @tornado.web.asynchronous

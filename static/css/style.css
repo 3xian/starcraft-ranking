@@ -18,8 +18,10 @@ h1, h2, h3 {
 	background-image: -ms-linear-gradient(#454B56,#393F48);	
 }
 .kuke-navbar-brand, .kuke-navbar-brand:hover {
-	padding: 10px;
+	font-family: "Hiragino Sans GB","Microsoft YaHei",Helvetica,sans-serif;
 	font-size: 22px;
+	font-weight: bold;
+	padding: 9px;
 	color: #EEE;
 	letter-spacing: 1px;
 	text-decoration: none;
@@ -92,7 +94,7 @@ h1, h2, h3 {
 }
 .kuke-white-board {
 	margin-top: 70px;
-	margin-bottom: 45px;
+	margin-bottom: 80px;
 	padding: 35px 8%;
 	background: #fff;
 	box-shadow: 0 0 3px 1px rgba(0,0,0,.05),0 1px 2px 0px rgba(0,0,0,.1);
@@ -107,16 +109,16 @@ h1, h2, h3 {
 	margin-top: 40px;
 	margin-bottom: 25px;
 	padding: 4px;
-	-webkit-box-shadow: 0px 1px 4px rgb(202, 202, 202);
-	box-shadow: 0px 1px 4px rgb(202, 202, 202);
+	-webkit-box-shadow: 0px 1px 4px rgb(172, 172, 172);
+	box-shadow: 0px 1px 4px rgb(172, 172, 172);
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 }
 .kuke-desc-textarea {
 	margin-bottom: 25px;
 	padding: 4px;
-	-webkit-box-shadow: 0px 1px 4px rgb(202, 202, 202);
-	box-shadow: 0px 1px 4px rgb(202, 202, 202);
+	-webkit-box-shadow: 0px 1px 4px rgb(172, 172, 172);
+	box-shadow: 0px 1px 4px rgb(172, 172, 172);
 	-webkit-border-radius: 3px;
 	border-radius: 3px;
 }

@@ -432,7 +432,7 @@ require.register("dropzone/lib/dropzone.js", function(exports, require, module){
       thumbnailHeight: 100,
       params: {},
       clickable: true,
-      acceptedMimeTypes: null,
+      acceptedMimeTypes: "image/*",
       acceptParameter: null,
       enqueueForUpload: true,
       previewsContainer: null,
@@ -440,7 +440,7 @@ require.register("dropzone/lib/dropzone.js", function(exports, require, module){
       dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
       dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
       dictFileTooBig: "File is too big ({{filesize}}MB). Max filesize: {{maxFilesize}}MB.",
-      dictInvalidFileType: "You can't upload files of this type.",
+      dictInvalidFileType: "这个好像不是图片",
       dictResponseError: "Server responded with {{statusCode}} code.",
       accept: function(file, done) {
         return done();

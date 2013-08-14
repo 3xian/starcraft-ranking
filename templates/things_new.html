@@ -14,38 +14,34 @@
 			<h3>发布产品</h3>
 			<p>感谢您分享您喜欢的新/奇/酷产品，一旦产品经过我们的编辑审核通过，将来有可能获得很大的优惠！</p>
 		</div>
-		<form action="/things/new" class="form-horizontal" id="new_thing" method="post">
+		<form action="/things/new" class="form-horizontal" id="newThing" method="post">
 			<div class="form-group">
-				<label class="col-lg-2 control-label" for="thing_title"><abbr title="required">*</abbr> 名称</label>
+				<label class="col-lg-2 control-label" for="newThingTitle"><abbr title="required">*</abbr> 名称</label>
 				<div class="col-lg-6">
-					<input class="form-control" id="thing_title" maxlength="40" name="title" placeholder="真实准确的品牌型号，40字以内" required="required" size="100" type="text">
+					<input class="form-control" id="newThingTitle" maxlength="40" name="title" placeholder="真实准确的品牌型号，40字以内" required="required" size="100" type="text">
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-lg-2 control-label" for="thing_subtitle">一句话介绍</label>
+				<label class="col-lg-2 control-label" for="newThingSubtitle">一句话介绍</label>
 				<div class="col-lg-6">
-					<input class="form-control" id="thing_subtitle" maxlength="40" name="subtitle" placeholder="您对产品的一句话介绍，40字以内" size="100" type="text" value="">
+					<input class="form-control" id="newThingSubtitle" maxlength="40" name="subtitle" placeholder="您对产品的一句话介绍，40字以内" size="100" type="text" value="">
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-lg-2 control-label" for="thing_official_site">官方链接</label>
+				<label class="col-lg-2 control-label" for="newThingBuylink">官方链接</label>
 				<div class="col-lg-6">
-					<input class="form-control" id="thing_official_site" name="buylink" placeholder="品牌官方网站的该产品链接地址" size="100" type="url" value="">
+					<input class="form-control" id="newThingBuylink" name="buylink" placeholder="品牌官方网站的该产品链接地址" size="100" type="url" value="">
 				</div>
 			</div>
 		</form>
 		<div class="kuke-dropzone">
-			<form action="/things/image-upload" class="dropzone" style="min-height:140px">
-				<div class="fallback">
-					<input name="file" type="file" multiple />
-				</div>
-			</form>
+			<form action="/things/image-upload" class="dropzone" style="min-height:140px" id="newThingDropzone"></form>
 		</div>
 		<div class="kuke-desc-textarea">
 			<textarea id="newThingDesc" name="new-thing-desc"></textarea>
 		</div>
 		<div>
-			<button class="btn btn-primary btn-lg" name="button" type="submit">提交产品</button>
+			<button class="btn btn-primary btn-lg" id="newThingSubmit">提交产品</button>
 		</div>
 	</div>
 </div>
