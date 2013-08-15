@@ -26,3 +26,10 @@ class BaseHandler(tornado.web.RequestHandler):
         if not user:
             user = self.current_user
         self.render(template_name, user=user, sort_type=sort_type, **args)
+
+    def str_to_list(self, s):
+        return [x.strip() for x in s.split(',') if x.strip()]
+
+    def get_list_argument(self, key):
+        buf = self.get_argument(key, '')
+        return self.str_to_list(buf)

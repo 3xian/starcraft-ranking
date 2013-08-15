@@ -65,12 +65,51 @@ class ThingsNewHandler(base.BaseHandler):
     def get(self):
         self.render_extend('things_new.html')
 
+    @tornado.web.authenticated
+    def post(self):
+        response = {
+            'error': ''
+        }
+
+        try:
+            title = self.get_argument('title')
+            subtitle = self.get_argument('subtitle')
+            buylink = self.get_argument('buylink')
+            tags = self.get_list_argument('tags')
+            image_ids = self.get_list_argument('image_ids')
+            desc = self.get_argument('desc')
+
+            thing_id = self.db.things.insert({
+                'title': title,
+                'subtitle': subtitle,
+                'buylink': buylink,
+                'tags': tags,
+                'image_ids': image_ids,
+                'desc': desc,
+                'visit': 0,
+                'favor': 0,
+                'date': datetime.datetime.utcnow(),
+                'user': self.current_user['uid'],
+                'auth': 0 
+            })
+            response['thing_id'] = str(thing_id)
+        except Exception, e:
+            logging.warning(e)
+            response['error'] = str(e)
+
+        response_json = tornado.escape.json_encode(response)
+        self.write(response_json)
+
 class ThingsImageUploadHandler(base.BaseHandler):
     @tornado.web.authenticated
     def post(self):
         image = self.request.files['file'][0]
         ext = os.path.splitext(image['filename'])[1]
-        image_id = self.db.images.insert({'ext':ext, 'date':datetime.datetime.utcnow()})
+        image_id = self.db.images.insert({
+            'user': self.current_user['uid'],
+            'ext': ext,
+            'date': datetime.datetime.utcnow()
+        })
         self.write(str(image_id))
 
 class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
@@ -93,9 +132,13 @@ class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
         if login_info:
             logging.info('login success: %s', login_info)
             uid = 'weibo$%d' % login_info['id']
-            self.db.users.update({'uid':uid},
-                                 {'uid':uid, 'name':login_info['screen_name'], 'img_url':login_info['profile_image_url']},
-                                 True)
+            self.db.users.update({
+                'uid': uid
+            }, {
+                'uid': uid,
+                'name': login_info['screen_name'],
+                'img_url': login_info['profile_image_url']
+            }, upsert=True)
             self.set_secure_cookie('uid', uid)
         else:
             logging.warning('login failed')
