@@ -23,11 +23,10 @@ things.init = function() {
 
 		// Prepare layout options.
 		var options = {
-			align: 'center',
 			itemWidth: 220, // Optional, the width of a grid item
 			autoResize: true, // This will auto-update the layout when the browser window is resized.
 			container: $('#cascade'),
-			offset: 20, // Optional, the distance between grid items
+			offset: 15, // Optional, the distance between grid items
 			flexibleWidth: 300 // Optional, the width of a grid item
 		};
 
@@ -50,19 +49,15 @@ things.init = function() {
 			var closeToBottom = ($(window).scrollTop() + winHeight > $(document).height() - 100);
 
 			if (closeToBottom) {
-				// Get the first then items from the grid, clone them, and add them to the bottom of the grid.
-				var items = $('.kuke-cascade li'),
-					firstTen = items.slice(0, 10);
+				var items = $('.kuke-cascade li');
+				var firstTen = items.slice(0, 10);
 				$('.kuke-cascade').append(firstTen.clone());
 
 				applyLayout();
 			}
 		};
-
-		// Capture scroll event.
 		$(window).bind('scroll', onScroll);
 
-		// Call the layout function.
 		handler = $('.kuke-cascade li');
 		handler.wookmark(options);
 	});
@@ -102,9 +97,10 @@ newThing.submit = function() {
 		alert("产品名称还没填呢");
 		return false;
 	}
-	var newThingSubtitle = $.trim($("#newThingSubtitle").val());
-	var newThingBuylink = $.trim($("#newThingBuylink").val());
+	var newThingSubtitle = $("#newThingSubtitle").val();
+	var newThingBuylink = $("#newThingBuylink").val();
 	var newThingTags = global.parseTags($("#newThingTags").val());
+	var newThingPrice = $("#newThingPrice").val();
 	var newThingDesc = this.editor.html();
 
 	$.post("/things/new", {
@@ -112,6 +108,7 @@ newThing.submit = function() {
 		subtitle: newThingSubtitle,
 		buylink: newThingBuylink,
 		tags: newThingTags.toString(),
+		price: newThingPrice,
 		image_ids: newThing.imageIDs.toString(),
 		desc: newThingDesc
 	}, function(msg) {
@@ -119,7 +116,7 @@ newThing.submit = function() {
 		if (response.error) {
 			alert("发布失败");
 		} else {
-			alert("发布成功");
+			alert("发布成功，请耐心等待管理员审核");
 			window.location = "/things/detail/" + response.thing_id;
 		}
 	});

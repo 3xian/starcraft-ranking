@@ -39,6 +39,13 @@
 					<input class="form-control" id="newThingTags" placeholder="添加标签，用逗号分隔" size="100" type="text">
 				</div>
 			</div>
+			<div class="form-group">
+				<label class="col-lg-2 control-label" for="newThingPrice">价格</label>
+				<div class="col-lg-6 input-group">
+					<span class="input-group-addon">￥</span>
+					<input class="form-control" id="newThingPrice" placeholder="0.00" size="100" type="text">
+				</div>
+			</div>
 		</form>
 		<div class="kuke-dropzone">
 			<form action="/things/image-upload" class="dropzone" style="min-height:140px" id="newThingDropzone"></form>
@@ -54,6 +61,6 @@
 {% end %}
 
 {% block scripts %}
-<script type="text/javascript" src="{{static_url('js/dz.js')}}"></script>
+<script type="text/javascript" src="{{static_url('js/dropzone.min.js')}}"></script>
 <script type="text/javascript" src="{{static_url('js/cleditor.js')}}"></script>
 {% end %}

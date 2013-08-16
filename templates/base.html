@@ -19,26 +19,33 @@
 				<div class="nav-collapse collapse">
 					<ul class="nav navbar-nav kuke-nav">
 						<li class="dropdown">
-						{% if sort_type == 'hot' %}
-						<a href="#" class="dropdown-toggle glyphicon glyphicon-fire kuke-glyphicon" data-toggle="dropdown"> 最热 <b class="caret"></b></a>
-						{% elif sort_type == 'favor' %}
-						<a href="#" class="dropdown-toggle glyphicon glyphicon-thumbs-up kuke-glyphicon" data-toggle="dropdown"> 最赞 <b class="caret"></b></a>
-						{% else %}
-						<a href="#" class="dropdown-toggle glyphicon glyphicon-refresh kuke-glyphicon" data-toggle="dropdown"> 最新 <b class="caret"></b></a>
-						{% end %}
-						<ul class="dropdown-menu">
-							<li><a href="/things" class="glyphicon glyphicon-refresh kuke-glyphicon"> 最新</a></li>
-							<li><a href="/things?sort=favor" class="glyphicon glyphicon-thumbs-up kuke-glyphicon"> 最赞</a></li>
-							<li><a href="/things?sort=hot" class="glyphicon glyphicon-fire kuke-glyphicon"> 最热</a></li>
-						</ul>
+							{% if sort_type == 'hot' %}
+							<a href="#" class="dropdown-toggle glyphicon glyphicon-fire kuke-glyphicon" data-toggle="dropdown"> 最热 <b class="caret"></b></a>
+							{% elif sort_type == 'favor' %}
+							<a href="#" class="dropdown-toggle glyphicon glyphicon-thumbs-up kuke-glyphicon" data-toggle="dropdown"> 最赞 <b class="caret"></b></a>
+							{% else %}
+							<a href="#" class="dropdown-toggle glyphicon glyphicon-refresh kuke-glyphicon" data-toggle="dropdown"> 最新 <b class="caret"></b></a>
+							{% end %}
+							<ul class="dropdown-menu">
+								<li><a href="/things" class="glyphicon glyphicon-refresh kuke-glyphicon"> 最新</a></li>
+								<li><a href="/things?sort=favor" class="glyphicon glyphicon-thumbs-up kuke-glyphicon"> 最赞</a></li>
+								<li><a href="/things?sort=hot" class="glyphicon glyphicon-fire kuke-glyphicon"> 最热</a></li>
+							</ul>
 						</li>
 						{% if user %}
 						<li><a href="/things/collection">收藏</a></li>
-						<li><a href="/things/new">发布</a></li>
+						<li><a href="/things/new">发布产品</a></li>
 						{% else %}
 						<li><a data-toggle="modal" href="#loginModal">收藏</a></li>
-						<li><a data-toggle="modal" href="#loginModal">发布</a></li>
+						<li><a data-toggle="modal" href="#loginModal">发布产品</a></li>
 						{% end %}
+						<li class="dropdown">
+							<a data-toggle="modal" href="#loginModal">关注我们</a>
+							<ul class="dropdown-menu">
+								<li><a href="#">官方微博</a></li>
+								<li><a href="#">官方微信</a></li>
+							</ul>
+						</li>
 					</ul>
 					<ul class="nav navbar-nav pull-right kuke-nav">
 						<li>
@@ -87,8 +94,8 @@
 		</div>
 		{% end %}
 
-		<script type="text/javascript" src="{{static_url('js/jquery.js')}}"></script>
-		<script type="text/javascript" src="{{static_url('js/ti.js')}}"></script>
+		<script type="text/javascript" src="{{static_url('js/jquery.min.js')}}"></script>
+		<script type="text/javascript" src="{{static_url('js/tipsy.min.js')}}"></script>
 		<script type="text/javascript" src="{{static_url('js/bootstrap.min.js')}}"></script>
 		{% block scripts %}
 		{% end %}

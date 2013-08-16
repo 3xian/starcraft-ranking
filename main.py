@@ -57,8 +57,9 @@ class ThingsHandler(base.BaseHandler):
 
     def get(self):
         user = self.get_current_user()
+        sort_type = self.get_sort_type()
         self.render('things.html',
-                    sort_type=self.get_sort_type(),
+                    sort_type=sort_type,
                     user=user)
 
 class ThingsNewHandler(base.BaseHandler):
@@ -77,6 +78,7 @@ class ThingsNewHandler(base.BaseHandler):
             subtitle = self.get_argument('subtitle')
             buylink = self.get_argument('buylink')
             tags = self.get_list_argument('tags')
+            price = self.get_argument('price')
             image_ids = self.get_list_argument('image_ids')
             desc = self.get_argument('desc')
 
@@ -85,6 +87,7 @@ class ThingsNewHandler(base.BaseHandler):
                 'subtitle': subtitle,
                 'buylink': buylink,
                 'tags': tags,
+                'price': price,
                 'image_ids': image_ids,
                 'desc': desc,
                 'visit': 0,
