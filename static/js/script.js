@@ -1,7 +1,7 @@
 var global = {};
 global.init = function() {
 	$(".tips-sw").tipsy({ gravity: "sw" });
-}
+};
 global.parseTags = function(str) {
 	var result = [];
 	str = str.replace(/，/g, ",");
@@ -11,7 +11,62 @@ global.parseTags = function(str) {
 		}
 	});
 	return result;
-}
+};
+
+var things = {};
+things.init = function() {
+	if ($('.kuke-cascade').length == 0) {
+		return false;
+	}
+	$('.kuke-cascade').imagesLoaded(function() {
+		var handler = null;
+
+		// Prepare layout options.
+		var options = {
+			align: 'center',
+			itemWidth: 220, // Optional, the width of a grid item
+			autoResize: true, // This will auto-update the layout when the browser window is resized.
+			container: $('#cascade'),
+			offset: 20, // Optional, the distance between grid items
+			flexibleWidth: 300 // Optional, the width of a grid item
+		};
+
+		function applyLayout() {
+			$('.kuke-cascade').imagesLoaded(function() {
+				// Destroy the old handler
+				if (handler.wookmarkInstance) {
+					handler.wookmarkInstance.clear();
+				}
+
+				// Create a new layout handler.
+				handler = $('.kuke-cascade li');
+				handler.wookmark(options);
+			});
+		}
+
+		function onScroll(event) {
+			// Check if we're within 100 pixels of the bottom edge of the broser window.
+			var winHeight = window.innerHeight ? window.innerHeight : $(window).height(); // iphone fix
+			var closeToBottom = ($(window).scrollTop() + winHeight > $(document).height() - 100);
+
+			if (closeToBottom) {
+				// Get the first then items from the grid, clone them, and add them to the bottom of the grid.
+				var items = $('.kuke-cascade li'),
+					firstTen = items.slice(0, 10);
+				$('.kuke-cascade').append(firstTen.clone());
+
+				applyLayout();
+			}
+		};
+
+		// Capture scroll event.
+		$(window).bind('scroll', onScroll);
+
+		// Call the layout function.
+		handler = $('.kuke-cascade li');
+		handler.wookmark(options);
+	});
+};
 
 var newThing = {
 	imageIDs: [],
@@ -72,5 +127,6 @@ newThing.submit = function() {
 
 $(function() {
 	global.init();
+	things.init();
 	newThing.init();
 });

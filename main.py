@@ -24,14 +24,15 @@ define('weibo_api_secret')
 class Application(tornado.web.Application):
     def __init__(self):
         handlers = [
-            ('/', ThingsHandler),
-            ('/users/auth/weibo', AuthWeiboHandler),
-            ('/things', ThingsHandler),
-            ('/things/new', ThingsNewHandler),
-            ('/things/image-upload', ThingsImageUploadHandler),
-            ('/users/messages', UsersMessagesHandler),
-            ('/users/logout', UsersLogoutHandler),
-            ('/test', TestHandler),
+            (r'/', ThingsHandler),
+            (r'/users/auth/weibo', AuthWeiboHandler),
+            (r'/things', ThingsHandler),
+            (r'/things/new', ThingsNewHandler),
+            (r'/things/image-upload', ThingsImageUploadHandler),
+            (r'/things/detail/(.*)', ThingsDetailHandler),
+            (r'/users/messages', UsersMessagesHandler),
+            (r'/users/logout', UsersLogoutHandler),
+            (r'/test', TestHandler),
         ]
         settings = dict(
             template_path=os.path.join(os.getcwd(), 'templates'),
@@ -111,6 +112,10 @@ class ThingsImageUploadHandler(base.BaseHandler):
             'date': datetime.datetime.utcnow()
         })
         self.write(str(image_id))
+
+class ThingsDetailHandler(base.BaseHandler):
+    def get(self, thing_id):
+        self.write(thing_id)
 
 class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
     @tornado.web.asynchronous

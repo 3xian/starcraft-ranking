@@ -1,2 +1,17 @@
 {% extends "base.html" %}
-{% block content %}TODO{% end %}
+
+{% block content %}
+<div class="container" id="cascade">
+	<ul class="kuke-cascade">
+		{% set things = range(10) %}
+		{% for thing in things %}
+		<li><img src="http://d02.res.meilishuo.net/pic/_o/b7/20/645b0af990348bf430089ec47d20_211_310.jpeg"></li>
+		{% end %}
+	</ul>
+</div>
+{% end %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{static_url('js/imagesloaded.js')}}"></script>
+<script type="text/javascript" src="{{static_url('js/wookmark.js')}}"></script>
+{% end %}

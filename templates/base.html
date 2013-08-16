@@ -20,24 +20,17 @@
 					<ul class="nav navbar-nav kuke-nav">
 						<li class="dropdown">
 						{% if sort_type == 'hot' %}
-						<a href="/things?sort=hot" class="dropdown-toggle glyphicon glyphicon-fire kuke-glyphicon" data-toggle="dropdown"> 最热 <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="/things" class="glyphicon glyphicon-refresh kuke-glyphicon"> 最新</a></li>
-							<li><a href="/things?sort=favor" class="glyphicon glyphicon-thumbs-up kuke-glyphicon"> 最赞</a></li>
-						</ul>
+						<a href="#" class="dropdown-toggle glyphicon glyphicon-fire kuke-glyphicon" data-toggle="dropdown"> 最热 <b class="caret"></b></a>
 						{% elif sort_type == 'favor' %}
-						<a href="/things?sort=favor" class="dropdown-toggle glyphicon glyphicon-thumbs-up kuke-glyphicon" data-toggle="dropdown"> 最赞 <b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle glyphicon glyphicon-thumbs-up kuke-glyphicon" data-toggle="dropdown"> 最赞 <b class="caret"></b></a>
+						{% else %}
+						<a href="#" class="dropdown-toggle glyphicon glyphicon-refresh kuke-glyphicon" data-toggle="dropdown"> 最新 <b class="caret"></b></a>
+						{% end %}
 						<ul class="dropdown-menu">
 							<li><a href="/things" class="glyphicon glyphicon-refresh kuke-glyphicon"> 最新</a></li>
-							<li><a href="/things?sort=hot" class="glyphicon glyphicon-fire kuke-glyphicon"> 最热</a></li>
-						</ul>
-						{% else %}
-						<a href="/things" class="dropdown-toggle glyphicon glyphicon-refresh kuke-glyphicon" data-toggle="dropdown"> 最新 <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="/things?sort=hot" class="glyphicon glyphicon-fire kuke-glyphicon"> 最热</a></li>
 							<li><a href="/things?sort=favor" class="glyphicon glyphicon-thumbs-up kuke-glyphicon"> 最赞</a></li>
+							<li><a href="/things?sort=hot" class="glyphicon glyphicon-fire kuke-glyphicon"> 最热</a></li>
 						</ul>
-						{% end %}
 						</li>
 						{% if user %}
 						<li><a href="/things/collection">收藏</a></li>
@@ -55,7 +48,7 @@
 						</li>
 						{% if user %}
 						<li class="dropdown">
-						
+
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img
 							src="{{user['img_url']}}" class="img-responsive kuke-nav-img"> {{user['name']}} <b class="caret"></b></a>
 						<ul class="dropdown-menu">
@@ -84,10 +77,10 @@
 						<h4 class="modal-title">登录</h4>
 					</div>
 					<div class="modal-body">
-					<div class="well">
-						<a href="/users/auth/weibo"><img src="{{static_url('img/icon-weibo.png')}}" class="img-responsive tips-sw kuke-icon kuke-hand" original-title="微博账号" id="loginWeibo"></a>
-						<img src="{{static_url('img/icon-taobao.png')}}" class="img-responsive tips-sw kuke-icon" original-title="淘宝账号">
-					</div>
+						<div class="well">
+							<a href="/users/auth/weibo"><img src="{{static_url('img/icon-weibo.png')}}" class="img-responsive tips-sw kuke-icon kuke-hand" original-title="微博账号" id="loginWeibo"></a>
+							<img src="{{static_url('img/icon-taobao.png')}}" class="img-responsive tips-sw kuke-icon" original-title="淘宝账号">
+						</div>
 					</div>
 				</div>
 			</div>
@@ -97,8 +90,8 @@
 		<script type="text/javascript" src="{{static_url('js/jquery.js')}}"></script>
 		<script type="text/javascript" src="{{static_url('js/ti.js')}}"></script>
 		<script type="text/javascript" src="{{static_url('js/bootstrap.min.js')}}"></script>
-		<script type="text/javascript" src="{{static_url('js/script.js')}}"></script>
 		{% block scripts %}
 		{% end %}
+		<script type="text/javascript" src="{{static_url('js/script.js')}}"></script>
 	</body>
 </html>
