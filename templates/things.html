@@ -3,9 +3,18 @@
 {% block content %}
 <div class="container" id="cascade">
 	<ul class="kuke-cascade">
-		{% set things = range(10) %}
 		{% for thing in things %}
-		<li><img src="http://d02.res.meilishuo.net/pic/_o/b7/20/645b0af990348bf430089ec47d20_211_310.jpeg"></li>
+		<li class="tips-sw" original-title="{{thing['subtitle']}}">
+			<a href="/things/detail/{{thing['_id']}}">
+				<img src="{{static_url(thing['image_url'])}}">
+				<h4>{{thing['title']}}</h4>
+				<div class="kuke-item-bottom">
+					<span class="glyphicon glyphicon-thumbs-up kuke-item-glyphicon"></span>
+					<span class="kuke-item-favor">{{thing['favor']}}</span>
+					<span class="kuke-item-price">￥{{thing['price']}}</span>
+				</div>
+			</a>
+		</li>
 		{% end %}
 	</ul>
 </div>

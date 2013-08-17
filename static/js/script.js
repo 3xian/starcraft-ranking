@@ -27,7 +27,7 @@ things.init = function() {
 			autoResize: true, // This will auto-update the layout when the browser window is resized.
 			container: $('#cascade'),
 			offset: 15, // Optional, the distance between grid items
-			flexibleWidth: 300 // Optional, the width of a grid item
+			flexibleWidth: 320 // Optional, the width of a grid item
 		};
 
 		function applyLayout() {
@@ -71,22 +71,27 @@ newThing.init = function() {
 	if ($("#newThing").length == 0) {
 		return false;
 	}
-	$("#newThingDesc").cleditor({
-		controls:
-		"style bold italic underline strikethrough | color highlight removeformat | " +
-		"link unlink image | bullets numbering indent outdent | undo redo"
-	});
-	this.editor = $(".cleditorMain iframe").contents().find('body');
+
 	Dropzone.options.newThingDropzone = {
 		init: function() {
 			this.on("success", function(file, msg) {
 				if ($.trim(msg).length > 0) {
 					newThing.imageIDs.push(msg);
 					console.log("image upload success:", msg);
+				} else {
+					console.log("image upload error");
 				}
 			});
 		}
 	};
+
+	$("#newThingDesc").cleditor({
+		controls:
+		"style bold italic underline strikethrough | color highlight removeformat | " +
+		"link unlink image | bullets numbering indent outdent | undo redo"
+	});
+	this.editor = $(".cleditorMain iframe").contents().find('body');
+
 	$("#newThingSubmit").click(function() {
 		newThing.submit();
 	});

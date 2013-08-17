@@ -1,3 +1,7 @@
+import logging
+import os
+
+import pymongo
 import tornado.web
 
 class SmartStaticFileHandler(tornado.web.StaticFileHandler):
@@ -13,8 +17,8 @@ class BaseHandler(tornado.web.RequestHandler):
     def db(self):
         return self.application.db
 
-    def static_path(self, subdir=''):
-        return os.path.join(self.settings['static_path'], subdir)
+    def static_path(self, sub=''):
+        return os.path.join(self.settings['static_path'], sub)
 
     def get_current_user(self):
         uid = self.get_secure_cookie('uid')
@@ -27,9 +31,13 @@ class BaseHandler(tornado.web.RequestHandler):
             user = self.current_user
         self.render(template_name, user=user, sort_type=sort_type, **args)
 
-    def str_to_list(self, s):
-        return [x.strip() for x in s.split(',') if x.strip()]
+    def str_to_list(self, s, element_class=str):
+        return [element_class(x.strip().encode('utf8')) for x in s.split(',') if x.strip()]
 
-    def get_list_argument(self, key):
+    def get_list_argument(self, key, element_class=str):
         buf = self.get_argument(key, '')
-        return self.str_to_list(buf)
+        return self.str_to_list(buf, element_class)
+
+    def image_urls(self, image_ids):
+        images = list(self.db.images.find({'_id': {'$in': image_ids}}).sort('date', pymongo.DESCENDING))
+        return [os.path.join('data', str(img['_id'])+img['ext']) for img in images]

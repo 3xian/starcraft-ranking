@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import bson
 import datetime
 import logging
 import os
@@ -20,6 +21,7 @@ define('port', default=80, type=int)
 define('domain')
 define('weibo_api_key')
 define('weibo_api_secret')
+define('items_per_page', type=int)
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -55,12 +57,32 @@ class ThingsHandler(base.BaseHandler):
             sort_type = 'time'
         return sort_type
 
+    def gen_things_image_url(self, things):
+        for thing in things:
+            if thing['image_ids']:
+                image_id = thing['image_ids'][0]
+                urls = self.image_urls([image_id])
+                thing['image_url'] = urls[0]
+            else:
+                thing['image_url'] = 'http://www.baidu.com/img/bdlogo.gif'
+        return things
+
+    def get_things(self, sort_type, page):
+        # offset = page * options.items_per_page
+        things = list(self.db.things.find().sort('date', pymongo.DESCENDING))
+        logging.info(things)
+        things = self.gen_things_image_url(things)
+        return things
+
     def get(self):
         user = self.get_current_user()
         sort_type = self.get_sort_type()
+        page = self.get_argument('page', 0)
+        things = self.get_things(sort_type, page)
         self.render('things.html',
                     sort_type=sort_type,
-                    user=user)
+                    user=user,
+                    things=things)
 
 class ThingsNewHandler(base.BaseHandler):
     @tornado.web.authenticated
@@ -79,7 +101,7 @@ class ThingsNewHandler(base.BaseHandler):
             buylink = self.get_argument('buylink')
             tags = self.get_list_argument('tags')
             price = self.get_argument('price')
-            image_ids = self.get_list_argument('image_ids')
+            image_ids = self.get_list_argument('image_ids', bson.objectid.ObjectId)
             desc = self.get_argument('desc')
 
             thing_id = self.db.things.insert({
@@ -114,7 +136,13 @@ class ThingsImageUploadHandler(base.BaseHandler):
             'ext': ext,
             'date': datetime.datetime.utcnow()
         })
-        self.write(str(image_id))
+        if image_id:
+            image_path = os.path.join(self.static_path('data'), str(image_id)+ext)
+            with open(image_path, 'w') as fout:
+                fout.write(image['body'])
+            self.write(str(image_id))
+        else:
+            pass # TODO
 
 class ThingsDetailHandler(base.BaseHandler):
     def get(self, thing_id):
