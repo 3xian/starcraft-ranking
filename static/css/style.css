@@ -72,7 +72,8 @@ h1, h2, h3, h4 {
 }
 .kuke-form-control {
 	height: 25px;
-	border-radius: 3px;
+	border-radius: 2px;
+	width: 120px;
 }
 .kuke-glyphicon:before {
 	font-size: 12px;
