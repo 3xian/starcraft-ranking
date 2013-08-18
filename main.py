@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import bson
+import bson.objectid
 import datetime
 import logging
 import os
+from bson.objectid import ObjectId
 
 import pymongo
 import tornado.httpserver
@@ -101,7 +102,7 @@ class ThingsNewHandler(base.BaseHandler):
             buylink = self.get_argument('buylink')
             tags = self.get_list_argument('tags')
             price = self.get_argument('price')
-            image_ids = self.get_list_argument('image_ids', bson.objectid.ObjectId)
+            image_ids = self.get_list_argument('image_ids', ObjectId)
             desc = self.get_argument('desc')
 
             thing_id = self.db.things.insert({
@@ -146,7 +147,10 @@ class ThingsImageUploadHandler(base.BaseHandler):
 
 class ThingsDetailHandler(base.BaseHandler):
     def get(self, thing_id):
-        self.write(thing_id)
+        thing = self.db.things.find_one({'_id': ObjectId(thing_id)})
+        if not thing:
+            raise tornado.web.HTTPError(404) 
+        self.render_extend('things_detail.html', thing=thing)
 
 class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
     @tornado.web.asynchronous

@@ -13,10 +13,12 @@
 	</head>
 
 	<body>
-		<div class="navbar navbar-fixed-top kuke-navbar">
+		<nav class="navbar navbar-fixed-top kuke-navbar" role="navigation">
 			<div class="container">
-				<a class="navbar-brand kuke-navbar-brand" href="/">酷客!</a>
-				<div class="nav-collapse collapse">
+				<div class="navbar-header">
+					<a class="navbar-brand kuke-navbar-brand" href="/">酷客!</a>
+				</div>
+				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav kuke-nav">
 						<li class="dropdown">
 							{% if sort_type == 'hot' %}
@@ -47,12 +49,7 @@
 							</ul>
 						</li>
 					</ul>
-					<ul class="nav navbar-nav pull-right kuke-nav">
-						<li>
-						<form class="navbar-form pull-left kuke-navbar-form" action="">
-							<input type="text" class="form-control kuke-form-control" placeholder="搜索">
-						</form>
-						</li>
+					<ul class="nav navbar-nav navbar-right kuke-nav">
 						{% if user %}
 						<li class="dropdown">
 
@@ -68,9 +65,12 @@
 						<li><a data-toggle="modal" href="#loginModal">登录</a></li>
 						{% end %}
 					</ul>
+					<form class="navbar-form navbar-right" role="search">
+						<input type="text" class="form-control kuke-form-control" placeholder="搜索">
+					</form>
 				</div>
 			</div>
-		</div>
+		</nav>
 
 		{% block content %}
 		{% end %}

@@ -27,7 +27,7 @@ things.init = function() {
 			autoResize: true, // This will auto-update the layout when the browser window is resized.
 			container: $('#cascade'),
 			offset: 15, // Optional, the distance between grid items
-			flexibleWidth: 320 // Optional, the width of a grid item
+			flexibleWidth: 300 // Optional, the width of a grid item
 		};
 
 		function applyLayout() {

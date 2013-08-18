@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{thing['title']}} - 酷客{% end %}
+
+{% block content %}
+<div class="container">
+	<div class="kuke-white-board-dense">
+		<div class="kuke-detail-head">
+			<h1>{{thing['title']}}</h1>
+			<h2>{{thing['subtitle']}}</h2>
+		</div>
+		<div class="row">
+			<div class="col-md-9 kuke-detail-info" role="main">
+			</div>
+			<div class="col-md-3 kuke-detail-actions">
+				{% if thing['price'] %}
+				<div class="kuke-detail-price">￥{{thing['price']}}</div>
+				{% end %}
+			</div>
+		</div>
+	</div>
+</div>
+{% end %}
