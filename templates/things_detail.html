@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{{static_url('css/pika/bottom.css')}}" >
+{% end %}
+
 {% block title %}{{thing['title']}} - 酷客{% end %}
 
 {% block content %}
@@ -11,13 +15,25 @@
 		</div>
 		<div class="row">
 			<div class="col-md-9 kuke-detail-info" role="main">
+				<div class="kuke-detail-gallery">
+					<ul id="pikame" class="jcarousel-skin-pika">
+						{% for img_url in thing['image_urls']  %}
+						<li><a><img src="{{static_url(img_url)}}"/></a></li>
+						{% end %}
+					</ul>	
+				</div>
 			</div>
 			<div class="col-md-3 kuke-detail-actions">
 				{% if thing['price'] %}
-				<div class="kuke-detail-price">￥{{thing['price']}}</div>
+				<div class="kuke-detail-price">¥ {{thing['price']}}</div>
 				{% end %}
 			</div>
 		</div>
 	</div>
 </div>
+{% end %}
+
+{% block scripts %}
+<script type="text/javascript" src="{{static_url('js/jquery.jcarousel.min.js')}}"></script>
+<script type="text/javascript" src="{{static_url('js/jquery.pikachoose.min.js')}}"></script>
 {% end %}

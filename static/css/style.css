@@ -30,13 +30,6 @@ h1, h2, h3, h4 {
 .kuke-nav>li {
 	border-left: 1px solid #343944;
 }
-.kuke-nav>li:hover {
-	background: -webkit-linear-gradient(top,#4F555F,#414751);
-	background: -moz-linear-gradient(top,#4F555F,#414751);
-	background: -o-linear-gradient(top,#4F555F,#414751);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4f555f',endColorstr='#414751');
-	background-image: -ms-linear-gradient(#4F555F,#414751);
-}
 .kuke-nav>li>a {
 	padding-top: 10px;
 	padding-bottom: 10px;
@@ -44,6 +37,11 @@ h1, h2, h3, h4 {
 }
 .kuke-nav>li>a:hover {
 	color: #FFF;
+	background: -webkit-linear-gradient(top,#4F555F,#414751);
+	background: -moz-linear-gradient(top,#4F555F,#414751);
+	background: -o-linear-gradient(top,#4F555F,#414751);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#4f555f',endColorstr='#414751');
+	background-image: -ms-linear-gradient(#4F555F,#414751);
 }
 .kuke-nav>li>a:focus {
 	color: #c4c7cc;
@@ -52,7 +50,7 @@ h1, h2, h3, h4 {
 	border-top-color: #FFF;
 	border-bottom-color: #FFF;
 }
-.kuke-nav>.dropdown>a:focus .caret {
+.dropdown-toggle>.caret {
 	border-top-color: #c4c7cc;
 	border-bottom-color: #c4c7cc;
 }
@@ -78,8 +76,6 @@ h1, h2, h3, h4 {
 }
 .kuke-glyphicon:before {
 	font-size: 12px;
-	line-height: 16px;
-	vertical-align: text-top;
 	margin-right: 2px;
 }
 .kuke-icon {
@@ -150,7 +146,7 @@ h1, h2, h3, h4 {
 .kuke-cascade>li>a {
 	text-decoration: none;
 	color: #999;
-	font-family: "Arail";
+	font-family: "Hiragino Sans GB","Microsoft YaHei",Helvetica,sans-serif;
 }
 .kuke-cascade>li>a>img {
 	width: 100%;
@@ -160,16 +156,12 @@ h1, h2, h3, h4 {
 	margin-top: 15px;
 }
 .kuke-item-favor {
-	vertical-align: text-bottom;
 	color: rgb(218, 157, 157);
 }
 .kuke-item-price {
-	vertical-align: text-bottom;
-	margin-left: 5px;
+	margin-left: 10px;
 }
 .kuke-item-glyphicon {
-	vertical-align: text-bottom;
-	font-size: 12px;
 	margin-right: 1px;
 	color: rgb(218, 157, 157);
 }
@@ -179,8 +171,7 @@ h1, h2, h3, h4 {
 }
 .kuke-detail-head {
 	text-align: center;
-	border-bottom: 1px solid #e5e5e5;
-	margin-bottom: 20px;
+	margin-bottom: 32px;
 }
 .kuke-detail-head>h1 {
 	font-size: 26px;
@@ -198,7 +189,7 @@ h1, h2, h3, h4 {
 }
 .kuke-detail-price {
 	font-size: 1.2em;
-	font-family: "Arail";
+	font-family: "Hiragino Sans GB","Microsoft YaHei",Helvetica,sans-serif;
 }
 ul.nav li.dropdown:hover ul.dropdown-menu {
 	display: block;    

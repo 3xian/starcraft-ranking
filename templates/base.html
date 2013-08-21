@@ -5,7 +5,6 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="keywords" content="酷客,电子产品,新奇产品,极客">
 		<link rel="stylesheet" type="text/css" href="{{static_url('css/bootstrap.min.css')}}" >
-		<link rel="stylesheet" type="text/css" href="{{static_url('css/bootstrap-glyphicons.css')}}" >
 		<link rel="stylesheet" type="text/css" href="{{static_url('css/tipsy.css')}}" >
 		<link rel="stylesheet" type="text/css" href="{{static_url('css/style.css')}}" >
 		{% block css %}
@@ -22,21 +21,30 @@
 					<ul class="nav navbar-nav kuke-nav">
 						<li class="dropdown">
 							{% if sort_type == 'hot' %}
-							<a href="#" class="dropdown-toggle glyphicon glyphicon-fire kuke-glyphicon" data-toggle="dropdown"> 最热 <b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<span class="glyphicon glyphicon-fire kuke-glyphicon"></span>
+								最热 <b class="caret"></b>
+							</a>
 							{% elif sort_type == 'favor' %}
-							<a href="#" class="dropdown-toggle glyphicon glyphicon-thumbs-up kuke-glyphicon" data-toggle="dropdown"> 最赞 <b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<span class="glyphicon glyphicon-thumbs-up kuke-glyphicon"></span>
+								最赞 <b class="caret"></b>
+							</a>
 							{% else %}
-							<a href="#" class="dropdown-toggle glyphicon glyphicon-refresh kuke-glyphicon" data-toggle="dropdown"> 最新 <b class="caret"></b></a>
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+								<span class="glyphicon glyphicon-refresh kuke-glyphicon"></span>
+								最新 <b class="caret"></b>
+							</a>
 							{% end %}
 							<ul class="dropdown-menu">
-								<li><a href="/things" class="glyphicon glyphicon-refresh kuke-glyphicon"> 最新</a></li>
-								<li><a href="/things?sort=favor" class="glyphicon glyphicon-thumbs-up kuke-glyphicon"> 最赞</a></li>
-								<li><a href="/things?sort=hot" class="glyphicon glyphicon-fire kuke-glyphicon"> 最热</a></li>
+								<li><a href="/things"><span class="glyphicon glyphicon-refresh kuke-glyphicon"></span> 最新</a></li>
+								<li><a href="/things?sort=favor"><span class="glyphicon glyphicon-thumbs-up kuke-glyphicon"></span> 最赞</a></li>
+								<li><a href="/things?sort=hot"><span  class="glyphicon glyphicon-fire kuke-glyphicon"></span> 最热</a></li>
 							</ul>
 						</li>
 						{% if user %}
 						<li><a href="/things/collection">收藏</a></li>
-						<li><a href="/things/new">发布产品</a></li>
+						<li><a href="/things/new">发布</a></li>
 						{% else %}
 						<li><a data-toggle="modal" href="#loginModal">收藏</a></li>
 						<li><a data-toggle="modal" href="#loginModal">发布产品</a></li>
@@ -53,12 +61,11 @@
 						{% if user %}
 						<li class="dropdown">
 
-						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img
-							src="{{user['img_url']}}" class="img-responsive kuke-nav-img"> {{user['name']}} <b class="caret"></b></a>
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{user['img_url']}}" class="kuke-nav-img"> {{user['name']}} <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="/users/{{user['_id']}}" class="glyphicon glyphicon-user kuke-glyphicon"> 个人主页</a></li>
-							<li><a href="/users/messages" class="glyphicon glyphicon-envelope kuke-glyphicon"> 消息</a></li>
-							<li><a href="/users/logout" class="glyphicon glyphicon-remove-circle kuke-glyphicon"> 退出</a></li>
+							<li><a href="/users/{{user['_id']}}"><span class="glyphicon glyphicon-user kuke-glyphicon"></span> 个人主页</a></li>
+							<li><a href="/users/messages"><span  class="glyphicon glyphicon-envelope kuke-glyphicon"></span> 消息</a></li>
+							<li><a href="/users/logout"><span class="glyphicon glyphicon-remove-circle kuke-glyphicon"></span> 退出</a></li>
 						</ul>
 						</li>
 						{% else %}
@@ -85,8 +92,8 @@
 					</div>
 					<div class="modal-body">
 						<div class="well">
-							<a href="/users/auth/weibo"><img src="{{static_url('img/icon-weibo.png')}}" class="img-responsive tips-sw kuke-icon kuke-hand" original-title="微博账号" id="loginWeibo"></a>
-							<img src="{{static_url('img/icon-taobao.png')}}" class="img-responsive tips-sw kuke-icon" original-title="淘宝账号">
+							<a href="/users/auth/weibo"><img src="{{static_url('img/icon-weibo.png')}}" class="tips-sw kuke-icon kuke-hand" original-title="微博账号" id="loginWeibo"></a>
+							<img src="{{static_url('img/icon-taobao.png')}}" class="tips-sw kuke-icon" original-title="淘宝账号">
 						</div>
 					</div>
 				</div>

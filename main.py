@@ -146,10 +146,18 @@ class ThingsImageUploadHandler(base.BaseHandler):
             pass # TODO
 
 class ThingsDetailHandler(base.BaseHandler):
+    def gen_thing_image_urls(self, thing):
+        if thing['image_ids']:
+            image_ids = thing['image_ids']
+            urls = self.image_urls(image_ids)
+            thing['image_urls'] = urls
+        return thing
+
     def get(self, thing_id):
         thing = self.db.things.find_one({'_id': ObjectId(thing_id)})
         if not thing:
             raise tornado.web.HTTPError(404) 
+        thing = self.gen_thing_image_urls(thing)
         self.render_extend('things_detail.html', thing=thing)
 
 class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):

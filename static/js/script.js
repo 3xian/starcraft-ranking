@@ -63,11 +63,11 @@ things.init = function() {
 	});
 };
 
-var newThing = {
+var thingsNew = {
 	imageIDs: [],
 	editor: null
 };
-newThing.init = function() {
+thingsNew.init = function() {
 	if ($("#newThing").length == 0) {
 		return false;
 	}
@@ -76,7 +76,7 @@ newThing.init = function() {
 		init: function() {
 			this.on("success", function(file, msg) {
 				if ($.trim(msg).length > 0) {
-					newThing.imageIDs.push(msg);
+					thingsNew.imageIDs.push(msg);
 					console.log("image upload success:", msg);
 				} else {
 					console.log("image upload error");
@@ -93,10 +93,10 @@ newThing.init = function() {
 	this.editor = $(".cleditorMain iframe").contents().find('body');
 
 	$("#newThingSubmit").click(function() {
-		newThing.submit();
+		thingsNew.submit();
 	});
 };
-newThing.submit = function() {
+thingsNew.submit = function() {
 	var newThingTitle = $.trim($("#newThingTitle").val());
 	if (newThingTitle.length == 0) {
 		alert("产品名称还没填呢");
@@ -114,7 +114,7 @@ newThing.submit = function() {
 		buylink: newThingBuylink,
 		tags: newThingTags.toString(),
 		price: newThingPrice,
-		image_ids: newThing.imageIDs.toString(),
+		image_ids: thingsNew.imageIDs.toString(),
 		desc: newThingDesc
 	}, function(msg) {
 		var response = JSON.parse(msg);
@@ -127,8 +127,17 @@ newThing.submit = function() {
 	});
 };
 
+var thingsDetail = {};
+thingsDetail.init = function() {
+	if ($("#pikame").length == 0) {
+		return false;
+	}
+	$("#pikame").PikaChoose({ carousel: true });
+}
+
 $(function() {
 	global.init();
 	things.init();
-	newThing.init();
+	thingsDetail.init();
+	thingsNew.init();
 });
