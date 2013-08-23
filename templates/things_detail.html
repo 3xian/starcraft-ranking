@@ -27,6 +27,11 @@
 				<div class="kuke-detail-desc">
 					{% raw thing['desc'] %}
 				</div>
+				<div class="kuke-detail-comments">
+					<div class="kuke-detail-comments-head">
+						<span class="glyphicon glyphicon-comment"></span>评论
+					</div>
+				</div>
 			</div>
 			<div class="col-md-3">
 				<div class="kuke-detail-actions">
@@ -48,7 +53,7 @@
 					<div class="kuke-detail-act" id="actShareWeibo">
 						<span class="glyphicon glyphicon-share"></span> 分享到微博
 					</div>
-					<div class="kuke-detail-act" id="actShareWechat">
+					<div class="kuke-detail-act" id="actShareWechat" data-toggle="modal" href="#qrcodeModal" tid="{{thing['_id']}}">
 						<span class="glyphicon glyphicon-qrcode"></span> 分享到微信
 					</div>
 				</div>
@@ -65,6 +70,22 @@
 					{% end %}
 				</div>
 				{% end %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="qrcodeModal">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">「{{thing['title']}}」二维码，扫一扫立即分享！</h4>
+			</div>
+			<div class="modal-body" style="text-align:center">
+				<div class="well">
+					<span id="qrcodeLoading">二维码图像生成中……</span>
+				</div>
 			</div>
 		</div>
 	</div>

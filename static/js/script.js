@@ -127,7 +127,9 @@ thingsNew.submit = function() {
 	});
 };
 
-var thingsDetail = {};
+var thingsDetail = {
+	calledQrcode: false
+};
 thingsDetail.init = function() {
 	if ($("#pikame").length == 0) {
 		return false;
@@ -136,6 +138,20 @@ thingsDetail.init = function() {
 		carousel: true,
 		transition:[0],
 		animationSpeed:200
+	});
+	$("#actShareWechat").click(function() {
+		if (!thingsDetail.calledQrcode) {
+			thingsDetail.calledQrcode = true;
+			var url = "/things/qrcode?tid=" + $(this).attr("tid"); 
+			var img = $("<img />").attr('src', url).load(function() {
+				if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
+					console.log('broken qrcode!');
+				} else {
+					$("#qrcodeLoading").hide();
+					$("#qrcodeLoading").parent().append(img);
+				}
+			});
+		}
 	});
 }
 

@@ -197,7 +197,7 @@ h1, h2, h3, h4 {
 }
 .kuke-detail-act {
 	cursor: pointer;
-	margin-bottom: 5px;
+	margin-bottom: 8px;
 	color: gray;
 }
 .kuke-detail-act:hover {
@@ -212,8 +212,8 @@ h1, h2, h3, h4 {
 	font-family: "Hiragino Sans GB","Microsoft YaHei",Helvetica,sans-serif;
 }
 .kuke-detail-desc {
-	border-left: 4px solid #F0F0F0;
-	padding: 3px 0 3px 8px;
+	border-left: 4px solid #DADADA;
+	padding: 3px 0 3px 12px;
 }
 .kuke-detail-buylink {
 	width: 65%;
@@ -232,11 +232,27 @@ h1, h2, h3, h4 {
 .kuke-detail-tag:hover {
 	background: lightGrey;
 }
+.kuke-detail-comments {
+	margin-top: 30px;
+	margin-bottom: 10px;
+	border-top: 2px solid #F3F3F3;
+	padding-top: 15px;
+}
+.kuke-detail-comments-head {
+	font-size: 20px;
+	color: rgb(108, 162, 167);
+}
+.kuke-detail-comments-head>.glyphicon {
+	margin-right: 6px;
+}
 #actFavor {
 	color: rgb(218, 157, 157);
 }
 #actCollect {
 	color: rgb(116, 156, 179);
+}
+#qrcodeLoading {
+	color: gray;
 }
 ul.nav li.dropdown:hover ul.dropdown-menu {
 	display: block;    

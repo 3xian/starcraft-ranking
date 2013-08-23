@@ -4,9 +4,11 @@ import bson.objectid
 import datetime
 import logging
 import os
+import StringIO
 from bson.objectid import ObjectId
 
 import pymongo
+import qrcode
 import tornado.escape
 import tornado.httpserver
 import tornado.ioloop
@@ -34,6 +36,7 @@ class Application(tornado.web.Application):
             (r'/things/new', ThingsNewHandler),
             (r'/things/image-upload', ThingsImageUploadHandler),
             (r'/things/detail/(.*)', ThingsDetailHandler),
+            (r'/things/qrcode', ThingsQrcodeHandler),
             (r'/users/messages', UsersMessagesHandler),
             (r'/users/logout', UsersLogoutHandler),
             (r'/test', TestHandler),
@@ -164,8 +167,30 @@ class ThingsDetailHandler(base.BaseHandler):
         thing = self.gen_thing_image_urls(thing)
         thing['user'] = self.db.users.find_one({'uid': thing['user']})
         self.render_extend('things_detail.html',
-                           thing=thing,
-                           unescape=tornado.escape.xhtml_unescape)
+                           thing=thing)
+
+class ThingsQrcodeHandler(base.BaseHandler):
+    def get_qrcode(self, data):
+        qr = qrcode.QRCode(
+            version=2,
+            box_size=6,
+            border=0,
+        )
+        qr.add_data(data)
+        qr.make()
+        return qr.make_image()
+
+    def get(self):
+        tid = self.get_argument('tid')
+        url = '%s/things/detail/%s' % (options.domain, tid)
+
+        fake_file = StringIO.StringIO()
+        img = self.get_qrcode(url)
+        img.save(fake_file, 'gif')
+        response = fake_file.getvalue()
+        fake_file.close()
+        self.set_header('Content-Type', 'image/gif')
+        self.write(response)
 
 class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
     @tornado.web.asynchronous
@@ -212,8 +237,24 @@ class UsersLogoutHandler(base.BaseHandler):
         self.redirect('/')
 
 class TestHandler(base.BaseHandler):
+    def get_qrcode(self, data):
+        qr = qrcode.QRCode(
+            version=2,
+            box_size=6,
+            border=0,
+        )
+        qr.add_data(data)
+        qr.make()
+        return qr.make_image()
+
     def get(self):
-        self.render('test.html')
+        fake_file = StringIO.StringIO()
+        img = self.get_qrcode('shit')
+        img.save(fake_file, 'gif')
+        response = fake_file.getvalue()
+        fake_file.close()
+        self.set_header('Content-Type', 'image/gif')
+        self.write(response)
 
 def main():
     tornado.options.parse_config_file('./kuke.conf')
