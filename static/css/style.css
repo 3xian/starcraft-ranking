@@ -184,12 +184,59 @@ h1, h2, h3, h4 {
 	margin-bottom: 20px;
 }
 .kuke-detail-actions {
-	border-left: 1px solid #e5e5e5;
+	border-top: 2px solid #F3F3F3;
 	padding: 20px;
 }
+.kuke-detail-actions>a {
+	text-decoration: none;
+}
+.kuke-detail-actions>a>img {
+	border: 1px solid rgb(228, 228, 228);
+	border-radius: 30px;
+	margin-right: 5px;
+}
+.kuke-detail-act {
+	cursor: pointer;
+	margin-bottom: 5px;
+	color: gray;
+}
+.kuke-detail-act:hover {
+	font-weight: bold;
+}
+.kuke-detail-act>.glyphicon {
+	margin-right: 10px;
+}
 .kuke-detail-price {
+	margin-bottom: 10px;
 	font-size: 1.2em;
 	font-family: "Hiragino Sans GB","Microsoft YaHei",Helvetica,sans-serif;
+}
+.kuke-detail-desc {
+	border-left: 4px solid #F0F0F0;
+	padding: 3px 0 3px 8px;
+}
+.kuke-detail-buylink {
+	width: 65%;
+}
+.kuke-detail-buylink>span {
+	margin-right: 5px;
+}
+.kuke-detail-tag {
+	cursor: pointer;
+	color: gray;
+	background: rgb(233, 233, 233);
+	border-radius: 2px;
+	padding: 5px;
+	margin-right: 1px;
+}
+.kuke-detail-tag:hover {
+	background: lightGrey;
+}
+#actFavor {
+	color: rgb(218, 157, 157);
+}
+#actCollect {
+	color: rgb(116, 156, 179);
 }
 ul.nav li.dropdown:hover ul.dropdown-menu {
 	display: block;    

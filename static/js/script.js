@@ -132,7 +132,11 @@ thingsDetail.init = function() {
 	if ($("#pikame").length == 0) {
 		return false;
 	}
-	$("#pikame").PikaChoose({ carousel: true });
+	$("#pikame").PikaChoose({
+		carousel: true,
+		transition:[0],
+		animationSpeed:200
+	});
 }
 
 $(function() {

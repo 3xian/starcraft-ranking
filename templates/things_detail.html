@@ -15,6 +15,7 @@
 		</div>
 		<div class="row">
 			<div class="col-md-9 kuke-detail-info" role="main">
+				{% if 'image_urls' in thing %}
 				<div class="kuke-detail-gallery">
 					<ul id="pikame" class="jcarousel-skin-pika">
 						{% for img_url in thing['image_urls']  %}
@@ -22,10 +23,47 @@
 						{% end %}
 					</ul>	
 				</div>
+				{% end %}
+				<div class="kuke-detail-desc">
+					{% raw thing['desc'] %}
+				</div>
 			</div>
-			<div class="col-md-3 kuke-detail-actions">
-				{% if thing['price'] %}
-				<div class="kuke-detail-price">¥ {{thing['price']}}</div>
+			<div class="col-md-3">
+				<div class="kuke-detail-actions">
+					{% if thing['price'] %}<div class="kuke-detail-price">¥ {{thing['price']}}</div>{% end %}
+					{% if thing['buylink'] %}
+					<a href="{{thing['buylink']}}" target="_blank" class="btn btn-success kuke-detail-buylink">
+						<span class="glyphicon glyphicon-shopping-cart"></span>
+						购买
+					</a>
+					{% end %}
+				</div>
+				<div class="kuke-detail-actions">
+					<div class="kuke-detail-act" id="actFavor">
+						<span class="glyphicon glyphicon-thumbs-up"></span> 赞一个
+					</div>
+					<div class="kuke-detail-act" id="actCollect">
+						<span class="glyphicon glyphicon-folder-open"></span> 收藏
+					</div>
+					<div class="kuke-detail-act" id="actShareWeibo">
+						<span class="glyphicon glyphicon-share"></span> 分享到微博
+					</div>
+					<div class="kuke-detail-act" id="actShareWechat">
+						<span class="glyphicon glyphicon-qrcode"></span> 分享到微信
+					</div>
+				</div>
+				<div class="kuke-detail-actions">
+					<a href="/users/{{thing['user']['_id']}}">
+						<img src="{{thing['user']['img_url']}}">
+						{{thing['user']['name']}}
+					</a>
+				</div>
+				{% if thing['tags'] %}
+				<div class="kuke-detail-actions">
+					{% for tag in thing['tags'] %}
+					<span class="kuke-detail-tag">{{tag}}</span>
+					{% end %}
+				</div>
 				{% end %}
 			</div>
 		</div>

@@ -7,6 +7,7 @@ import os
 from bson.objectid import ObjectId
 
 import pymongo
+import tornado.escape
 import tornado.httpserver
 import tornado.ioloop
 import tornado.options
@@ -105,6 +106,9 @@ class ThingsNewHandler(base.BaseHandler):
             image_ids = self.get_list_argument('image_ids', ObjectId)
             desc = self.get_argument('desc')
 
+            logging.info('title: %s', title)
+            logging.info('desc: %s', desc)
+
             thing_id = self.db.things.insert({
                 'title': title,
                 'subtitle': subtitle,
@@ -158,7 +162,10 @@ class ThingsDetailHandler(base.BaseHandler):
         if not thing:
             raise tornado.web.HTTPError(404) 
         thing = self.gen_thing_image_urls(thing)
-        self.render_extend('things_detail.html', thing=thing)
+        thing['user'] = self.db.users.find_one({'uid': thing['user']})
+        self.render_extend('things_detail.html',
+                           thing=thing,
+                           unescape=tornado.escape.xhtml_unescape)
 
 class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
     @tornado.web.asynchronous
