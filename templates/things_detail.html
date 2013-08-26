@@ -44,16 +44,28 @@
 					{% end %}
 				</div>
 				<div class="kuke-detail-actions">
+					{% if thing['favored'] %}
+					<div class="kuke-detail-act" id="actDisfavor">
+						<span class="glyphicon glyphicon-thumbs-down"></span> 已赞（单击取消）
+					</div>
+					{% else %}
 					<div class="kuke-detail-act" id="actFavor">
 						<span class="glyphicon glyphicon-thumbs-up"></span> 赞一个
 					</div>
+					{% end %}
+					{% if thing['collected'] %}
+					<div class="kuke-detail-act" id="actDiscollect">
+						<span class="glyphicon glyphicon-folder-close"></span> 已收藏（单击取消）
+					</div>
+					{% else %}
 					<div class="kuke-detail-act" id="actCollect">
 						<span class="glyphicon glyphicon-folder-open"></span> 收藏
 					</div>
+					{% end %}
 					<div class="kuke-detail-act" id="actShareWeibo">
 						<span class="glyphicon glyphicon-share"></span> 分享到微博
 					</div>
-					<div class="kuke-detail-act" id="actShareWechat" data-toggle="modal" href="#qrcodeModal" tid="{{thing['_id']}}">
+					<div class="kuke-detail-act" id="actShareWechat" data-toggle="modal" href="#qrcodeModal">
 						<span class="glyphicon glyphicon-qrcode"></span> 分享到微信
 					</div>
 				</div>
@@ -90,6 +102,7 @@
 		</div>
 	</div>
 </div>
+<div id="thingInfo" tid="{{thing['_id']}}"></div>
 {% end %}
 
 {% block scripts %}

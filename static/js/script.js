@@ -15,10 +15,10 @@ global.parseTags = function(str) {
 
 var things = {};
 things.init = function() {
-	if ($('.kuke-cascade').length == 0) {
+	if ($(".kuke-cascade").length == 0) {
 		return false;
 	}
-	$('.kuke-cascade').imagesLoaded(function() {
+	$(".kuke-cascade").imagesLoaded(function() {
 		var handler = null;
 
 		// Prepare layout options.
@@ -130,6 +130,58 @@ thingsNew.submit = function() {
 var thingsDetail = {
 	calledQrcode: false
 };
+thingsDetail.initCollect = function () {
+	$("#actCollect").click(function() {
+		$.post("/things/collect", {
+			tid: $("#thingInfo").attr("tid"),
+			op: 1
+		}, function(msg) {
+			var response = JSON.parse(msg);
+			if (response.error) {
+				alert("收藏失败");
+			}
+			window.location.reload();
+		});
+	});
+	$("#actDiscollect").click(function() {
+		$.post("/things/collect", {
+			tid: $("#thingInfo").attr("tid"),
+			op: 0
+		}, function(msg) {
+			var response = JSON.parse(msg);
+			if (response.error) {
+				alert("取消收藏失败");
+			}
+			window.location.reload();
+		});
+	});
+}
+thingsDetail.initFavor = function () {
+	$("#actFavor").click(function() {
+		$.post("/things/favor", {
+			tid: $("#thingInfo").attr("tid"),
+			op: 1
+		}, function(msg) {
+			var response = JSON.parse(msg);
+			if (response.error) {
+				alert("没赞成功");
+			}
+			window.location.reload();
+		});
+	});
+	$("#actDisfavor").click(function() {
+		$.post("/things/favor", {
+			tid: $("#thingInfo").attr("tid"),
+			op: 0
+		}, function(msg) {
+			var response = JSON.parse(msg);
+			if (response.error) {
+				alert("取消赞失败");
+			}
+			window.location.reload();
+		});
+	});
+}
 thingsDetail.init = function() {
 	if ($("#pikame").length == 0) {
 		return false;
@@ -142,7 +194,7 @@ thingsDetail.init = function() {
 	$("#actShareWechat").click(function() {
 		if (!thingsDetail.calledQrcode) {
 			thingsDetail.calledQrcode = true;
-			var url = "/things/qrcode?tid=" + $(this).attr("tid"); 
+			var url = "/things/qrcode?tid=" + $("#thingInfo").attr("tid"); 
 			var img = $("<img />").attr('src', url).load(function() {
 				if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth == 0) {
 					console.log('broken qrcode!');
@@ -153,6 +205,8 @@ thingsDetail.init = function() {
 			});
 		}
 	});
+	this.initCollect();
+	this.initFavor();
 }
 
 $(function() {

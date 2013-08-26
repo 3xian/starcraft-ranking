@@ -16,6 +16,7 @@ import tornado.options
 import tornado.web
 import tornado.gen
 from tornado.options import define, options
+from tornado.escape import json_encode
 
 import base
 import auth
@@ -34,6 +35,8 @@ class Application(tornado.web.Application):
             (r'/users/auth/weibo', AuthWeiboHandler),
             (r'/things', ThingsHandler),
             (r'/things/new', ThingsNewHandler),
+            (r'/things/collect', ThingsCollectHandler),
+            (r'/things/favor', ThingsFavorHandler),
             (r'/things/image-upload', ThingsImageUploadHandler),
             (r'/things/detail/(.*)', ThingsDetailHandler),
             (r'/things/qrcode', ThingsQrcodeHandler),
@@ -74,8 +77,13 @@ class ThingsHandler(base.BaseHandler):
 
     def get_things(self, sort_type, page):
         # offset = page * options.items_per_page
-        things = list(self.db.things.find().sort('date', pymongo.DESCENDING))
-        logging.info(things)
+        if sort_type == 'time':
+            things = list(self.db.things.find().sort('date', pymongo.DESCENDING))
+        elif sort_type == 'hot':
+            things = list(self.db.things.find().sort('visit', pymongo.DESCENDING))
+        else:
+            pass # TODO
+
         things = self.gen_things_image_url(things)
         return things
 
@@ -96,10 +104,7 @@ class ThingsNewHandler(base.BaseHandler):
 
     @tornado.web.authenticated
     def post(self):
-        response = {
-            'error': ''
-        }
-
+        response = {'error': ''}
         try:
             title = self.get_argument('title')
             subtitle = self.get_argument('subtitle')
@@ -131,7 +136,47 @@ class ThingsNewHandler(base.BaseHandler):
             logging.warning(e)
             response['error'] = str(e)
 
-        response_json = tornado.escape.json_encode(response)
+        response_json = json_encode(response)
+        self.write(response_json)
+
+class ThingsCollectHandler(base.BaseHandler):
+    @tornado.web.authenticated
+    def post(self):
+        response = {'error': ''}
+        try:
+            tid = self.get_argument('tid')
+            op = self.get_argument('op')
+            if op == '1':
+                self.db.users.update({'_id': self.current_user['_id']},
+                                     {'$addToSet': {'collect': ObjectId(tid)}})
+            else:
+                self.db.users.update({'_id': self.current_user['_id']},
+                                     {'$pull': {'collect': ObjectId(tid)}})
+        except Exception, e:
+            logging.warning(e)
+            response['error'] = str(e)
+        response_json = json_encode(response)
+        self.write(response_json)
+
+class ThingsFavorHandler(base.BaseHandler):
+    @tornado.web.authenticated
+    def post(self):
+        response = {'error': ''}
+        try:
+            tid = self.get_argument('tid')
+            op = self.get_argument('op')
+            if op == '1':
+                logging.info('favor')
+                self.db.users.update({'_id': self.current_user['_id']},
+                                     {'$addToSet': {'favor': ObjectId(tid)}})
+            else:
+                logging.info('disfavor')
+                self.db.users.update({'_id': self.current_user['_id']},
+                                     {'$pull': {'favor': ObjectId(tid)}})
+        except Exception, e:
+            logging.warning(e)
+            response['error'] = str(e)
+        response_json = json_encode(response)
         self.write(response_json)
 
 class ThingsImageUploadHandler(base.BaseHandler):
@@ -160,12 +205,20 @@ class ThingsDetailHandler(base.BaseHandler):
             thing['image_urls'] = urls
         return thing
 
+    def visit_plus(self, thing):
+        self.db.things.update({'_id': thing['_id']},
+                              {'$inc': {'visit': 1}},
+                              w=0)
+
     def get(self, thing_id):
         thing = self.db.things.find_one({'_id': ObjectId(thing_id)})
         if not thing:
             raise tornado.web.HTTPError(404) 
+        self.visit_plus(thing)
         thing = self.gen_thing_image_urls(thing)
         thing['user'] = self.db.users.find_one({'uid': thing['user']})
+        thing['collected'] = (thing['_id'] in self.current_user['collect'])
+        thing['favored'] = (thing['_id'] in self.current_user['favor'])
         self.render_extend('things_detail.html',
                            thing=thing)
 
@@ -212,13 +265,15 @@ class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
         if login_info:
             logging.info('login success: %s', login_info)
             uid = 'weibo$%d' % login_info['id']
-            self.db.users.update({
-                'uid': uid
-            }, {
-                'uid': uid,
-                'name': login_info['screen_name'],
-                'img_url': login_info['profile_image_url']
-            }, upsert=True)
+            self.db.users.update({'uid': uid},
+                                 {
+                                     'uid': uid,
+                                     'name': login_info['screen_name'],
+                                     'img_url': login_info['profile_image_url'],
+                                     'favor': [],
+                                     'collect': []
+                                 },
+                                 upsert=True)
             self.set_secure_cookie('uid', uid)
         else:
             logging.warning('login failed')

@@ -156,14 +156,14 @@ h1, h2, h3, h4 {
 	margin-top: 15px;
 }
 .kuke-item-favor {
-	color: rgb(218, 157, 157);
+	color: rgb(197, 105, 76);
 }
 .kuke-item-price {
 	margin-left: 10px;
 }
 .kuke-item-glyphicon {
 	margin-right: 1px;
-	color: rgb(218, 157, 157);
+	color: rgb(197, 105, 76);
 }
 .kuke-item-bottom {
 	text-align: center;
@@ -245,10 +245,10 @@ h1, h2, h3, h4 {
 .kuke-detail-comments-head>.glyphicon {
 	margin-right: 6px;
 }
-#actFavor {
-	color: rgb(218, 157, 157);
+#actFavor, #actDisfavor {
+	color: rgb(197, 105, 76);
 }
-#actCollect {
+#actCollect, #actDiscollect {
 	color: rgb(116, 156, 179);
 }
 #qrcodeLoading {
