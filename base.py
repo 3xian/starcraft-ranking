@@ -41,3 +41,13 @@ class BaseHandler(tornado.web.RequestHandler):
     def image_urls(self, image_ids):
         images = list(self.db.images.find({'_id': {'$in': image_ids}}).sort('date', pymongo.DESCENDING))
         return [os.path.join('data', str(img['_id'])+img['ext']) for img in images]
+
+    def gen_things_image_url(self, things):
+        for thing in things:
+            if thing['image_ids']:
+                image_id = thing['image_ids'][0]
+                urls = self.image_urls([image_id])
+                thing['image_url'] = urls[0]
+            else:
+                thing['image_url'] = 'http://www.baidu.com/img/bdlogo.gif'
+        return things

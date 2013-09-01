@@ -34,6 +34,7 @@ class Application(tornado.web.Application):
             (r'/', ThingsHandler),
             (r'/users/auth/weibo', AuthWeiboHandler),
             (r'/things', ThingsHandler),
+            (r'/things/collection', ThingsCollectionHandler),
             (r'/things/new', ThingsNewHandler),
             (r'/things/collect', ThingsCollectHandler),
             (r'/things/favor', ThingsFavorHandler),
@@ -65,22 +66,14 @@ class ThingsHandler(base.BaseHandler):
             sort_type = 'time'
         return sort_type
 
-    def gen_things_image_url(self, things):
-        for thing in things:
-            if thing['image_ids']:
-                image_id = thing['image_ids'][0]
-                urls = self.image_urls([image_id])
-                thing['image_url'] = urls[0]
-            else:
-                thing['image_url'] = 'http://www.baidu.com/img/bdlogo.gif'
-        return things
-
     def get_things(self, sort_type, page):
         # offset = page * options.items_per_page
         if sort_type == 'time':
             things = list(self.db.things.find().sort('date', pymongo.DESCENDING))
         elif sort_type == 'hot':
             things = list(self.db.things.find().sort('visit', pymongo.DESCENDING))
+        elif sort_type == 'favor':
+            things = list(self.db.things.find().sort('favor', pymongo.DESCENDING))
         else:
             pass # TODO
 
@@ -96,6 +89,21 @@ class ThingsHandler(base.BaseHandler):
                     sort_type=sort_type,
                     user=user,
                     things=things)
+
+class ThingsCollectionHandler(base.BaseHandler):
+    def get_things(self, page):
+        # offset = page * options.items_per_page
+        tids = self.db.users.find_one({'_id': self.current_user['_id']})['collect']
+        things = list(self.db.things.find({'_id': {'$in': tids}}).sort('date', pymongo.DESCENDING))
+        things = self.gen_things_image_url(things)
+        return things
+
+    @tornado.web.authenticated
+    def get(self):
+        user = self.get_current_user()
+        page = self.get_argument('page', 0)
+        things = self.get_things(page)
+        self.render_extend('things.html', things=things)
 
 class ThingsNewHandler(base.BaseHandler):
     @tornado.web.authenticated
@@ -169,10 +177,16 @@ class ThingsFavorHandler(base.BaseHandler):
                 logging.info('favor')
                 self.db.users.update({'_id': self.current_user['_id']},
                                      {'$addToSet': {'favor': ObjectId(tid)}})
+                thing = self.db.things.find_and_modify({'_id': ObjectId(tid)},
+                                                       {'$inc': {'favor': 1}})
+                response['favor'] = thing['favor'] + 1
             else:
                 logging.info('disfavor')
                 self.db.users.update({'_id': self.current_user['_id']},
                                      {'$pull': {'favor': ObjectId(tid)}})
+                thing = self.db.things.find_and_modify({'_id': ObjectId(tid)},
+                                                       {'$inc': {'favor': -1}})
+                response['favor'] = thing['favor'] - 1
         except Exception, e:
             logging.warning(e)
             response['error'] = str(e)
@@ -217,8 +231,8 @@ class ThingsDetailHandler(base.BaseHandler):
         self.visit_plus(thing)
         thing = self.gen_thing_image_urls(thing)
         thing['user'] = self.db.users.find_one({'uid': thing['user']})
-        thing['collected'] = (thing['_id'] in self.current_user['collect'])
-        thing['favored'] = (thing['_id'] in self.current_user['favor'])
+        thing['collected'] = self.current_user and (thing['_id'] in self.current_user['collect'])
+        thing['favored'] = self.current_user and (thing['_id'] in self.current_user['favor'])
         self.render_extend('things_detail.html',
                            thing=thing)
 

@@ -46,13 +46,28 @@
 				<div class="kuke-detail-actions">
 					{% if thing['favored'] %}
 					<div class="kuke-detail-act" id="actDisfavor">
+					{% else %}
+					<div class="kuke-detail-act hide" id="actDisfavor">
+					{% end %}
 						<span class="glyphicon glyphicon-thumbs-down"></span> 已赞（单击取消）
+						<span class="label label-danger">
+							<span class="kuke-detail-favornum">{{thing['favor']}}</span>
+							人
+						</span>
 					</div>
+
+					{% if thing['favored'] %}
+					<div class="kuke-detail-act hide" id="actFavor">
 					{% else %}
 					<div class="kuke-detail-act" id="actFavor">
-						<span class="glyphicon glyphicon-thumbs-up"></span> 赞一个
-					</div>
 					{% end %}
+						<span class="glyphicon glyphicon-thumbs-up"></span> 赞一个
+						<span class="label label-danger">
+							<span class="kuke-detail-favornum">{{thing['favor']}}</span>
+							人
+						</span>
+					</div>
+
 					{% if thing['collected'] %}
 					<div class="kuke-detail-act" id="actDiscollect">
 						<span class="glyphicon glyphicon-folder-close"></span> 已收藏（单击取消）

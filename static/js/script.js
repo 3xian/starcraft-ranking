@@ -165,8 +165,11 @@ thingsDetail.initFavor = function () {
 			var response = JSON.parse(msg);
 			if (response.error) {
 				alert("没赞成功");
+			} else {
+				$("#actFavor").addClass("hide");
+				$(".kuke-detail-favornum").text(response.favor)
+				$("#actDisfavor").removeClass("hide");
 			}
-			window.location.reload();
 		});
 	});
 	$("#actDisfavor").click(function() {
@@ -177,8 +180,11 @@ thingsDetail.initFavor = function () {
 			var response = JSON.parse(msg);
 			if (response.error) {
 				alert("取消赞失败");
+			} else {
+				$("#actFavor").removeClass("hide");
+				$(".kuke-detail-favornum").text(response.favor)
+				$("#actDisfavor").addClass("hide");
 			}
-			window.location.reload();
 		});
 	});
 }

@@ -5,6 +5,7 @@ def main():
     db.users.ensure_index('uid')
     db.things.ensure_index([('date', pymongo.DESCENDING)])
     db.things.ensure_index([('visit', pymongo.DESCENDING)])
+    db.things.ensure_index([('favor', pymongo.DESCENDING)])
     db.things.ensure_index([('tags', pymongo.ASCENDING), ('date', pymongo.DESCENDING)])
 
 if __name__ == '__main__':
