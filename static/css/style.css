@@ -234,21 +234,27 @@ h1, h2, h3, h4 {
 	background: lightGrey;
 }
 .kuke-detail-comments {
-	margin-top: 30px;
+	margin-top: 25px;
 	margin-bottom: 10px;
-	border-top: 2px solid #F3F3F3;
 	padding-top: 15px;
 	font-family: "Hiragino Sans GB","Microsoft YaHei",Helvetica,sans-serif;
 }
 .kuke-detail-comments-head {
 	font-size: 20px;
-	color: rgb(108, 162, 167);
+	color: #5bc0de;
 }
 .kuke-detail-comments-head>.glyphicon {
 	margin-right: 6px;
 }
 .kuke-table {
 	background-color: white;
+}
+.kuke-comment-form {
+	margin-top: 15px;
+}
+.help-block {
+	color: #999;
+	font-style: italic;
 }
 #actFavor, #actDisfavor {
 	color: rgb(197, 105, 76);
