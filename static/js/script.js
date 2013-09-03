@@ -20,6 +20,7 @@ things.init = function() {
 	}
 	$(".kuke-cascade").imagesLoaded(function() {
 		var handler = null;
+		var isLoading = false;
 
 		// Prepare layout options.
 		var options = {
@@ -43,17 +44,48 @@ things.init = function() {
 			});
 		}
 
+		function updateTiles(tiles) {
+			if (tiles.length > 0) {
+				$('.kuke-cascade').append(tiles);
+				applyLayout();
+				$(".tips-sw").tipsy({ gravity: "sw" });
+			} else {
+				$("#noMoreTiles").fadeIn();
+			}
+		}
+
 		function onScroll(event) {
 			// Check if we're within 100 pixels of the bottom edge of the broser window.
 			var winHeight = window.innerHeight ? window.innerHeight : $(window).height(); // iphone fix
 			var closeToBottom = ($(window).scrollTop() + winHeight > $(document).height() - 100);
 
-			if (closeToBottom) {
-				var items = $('.kuke-cascade li');
-				var firstTen = items.slice(0, 10);
-				$('.kuke-cascade').append(firstTen.clone());
+			if (closeToBottom && !isLoading) {
+				isLoading = true;
+				$.post("things", {
+					offset: $(".kuke-cascade li").length,
+					sort: $("#info").attr("sort-type")
+				}, function(msg) {
+					var response = JSON.parse(msg);
+					if (response.error) {
+						alert("读取产品失败");
+					} else {
+						var tilesInfo = response.things;
+						var tiles = [];
+						var sample = $('.kuke-cascade li')[0];
 
-				applyLayout();
+						for (var i in tilesInfo) {
+							var tile = $(sample).clone();
+							tile.attr("original-title", tilesInfo[i]["subtitle"]);
+							tile.children("a").attr("href", "/things/detail/"+tilesInfo[i]["_id"]);
+							tile.find("img").attr("src", "/static/"+tilesInfo[i]["image_url"]);
+							tile.find("h4").text(tilesInfo[i]["title"]);
+							tile.find(".kuke-item-favor").text(tilesInfo[i]["favor"]);
+							tiles.push(tile);
+						}
+						updateTiles(tiles);
+						isLoading = false;
+					}
+				});
 			}
 		};
 		$(window).bind('scroll', onScroll);
@@ -206,7 +238,7 @@ thingsDetail.init = function() {
 		carousel: true,
 		transition: [0],
 		animationSpeed: 200,
-		speed: 10000
+		autoPlay: false
 	});
 	$("#actShareWechat").click(function() {
 		if (!thingsDetail.calledQrcode) {

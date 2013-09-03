@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}审核产品 - 酷客{% end %}
+
+{% block content %}
+<div class="container">
+	<table class="table table-hover table-bordered kuke-table">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>产品名称</th>
+				<th>发布人</th>
+				<th>时间</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for thing in things %}
+			<tr>
+				<td>
+					<a href="/things/detail/{{thing['_id']}}">{{thing['_id']}}</a>
+				</td>
+				<td>
+					<a href="/things/detail/{{thing['_id']}}">{{thing['title']}}</a>
+				</td>
+				<td>{{thing['user']}}</td>
+				<td>{{str(thing['date']).split('.')[0]}}</td>
+				<td>
+					<button type="button" class="btn btn-primary btn-sm kuke-admin-permit-btn" tid="{{thing['_id']}}">批准</button>
+					<button type="button" class="btn btn-default btn-sm kuke-admin-remove-btn" tid="{{thing['_id']}}">删除</button>
+				</td>
+			</tr>
+			{% end %}
+		</tbody>
+	</table>
+</div>
+{% end %}

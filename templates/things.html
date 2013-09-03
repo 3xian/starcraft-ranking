@@ -3,6 +3,7 @@
 {% block title %}{{title}}{%end%}
 
 {% block content %}
+<div id="info" class="hide" sort-type="{{sort_type}}"></div>
 <div class="container" id="cascade">
 	<ul class="kuke-cascade">
 		{% for thing in things %}
@@ -21,6 +22,9 @@
 		</li>
 		{% end %}
 	</ul>
+</div>
+<div class="container">
+	<div id="noMoreTiles">没有更多了…</div>
 </div>
 {% end %}
 

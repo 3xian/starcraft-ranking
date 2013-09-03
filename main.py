@@ -27,6 +27,7 @@ define('domain')
 define('weibo_api_key')
 define('weibo_api_secret')
 define('items_per_page', type=int)
+define('debug', type=int)
 
 class Application(tornado.web.Application):
     def __init__(self):
@@ -57,7 +58,7 @@ class Application(tornado.web.Application):
             xsrf_cookies=False,
             cookie_secret='__WhatColorIsThat?!__',
             login_url='/',
-            debug=False,
+            debug=(options.debug != 0),
             static_handler_class=base.SmartStaticFileHandler,
         )
         tornado.web.Application.__init__(self, handlers, **settings)
@@ -72,30 +73,44 @@ class ThingsHandler(base.BaseHandler):
             sort_type = 'time'
         return sort_type
 
-    def get_things(self, sort_type, page):
-        # offset = page * options.items_per_page
-        if sort_type == 'time':
-            things = list(self.db.things.find().sort('date', pymongo.DESCENDING))
-        elif sort_type == 'hot':
-            things = list(self.db.things.find().sort('visit', pymongo.DESCENDING))
+    def get_things(self, sort_type, offset):
+        if sort_type == 'hot':
+            sort_key = 'visit'
         elif sort_type == 'favor':
-            things = list(self.db.things.find().sort('favor', pymongo.DESCENDING))
+            sort_key = 'favor'
         else:
-            pass # TODO
+            sort_key = 'date'
 
+        things = list(self.db.things.find().sort(sort_key, pymongo.DESCENDING).\
+                skip(offset).limit(options.items_per_page))
         things = self.gen_things_image_url(things)
         return things
 
     def get(self):
         user = self.get_current_user()
         sort_type = self.get_sort_type()
-        page = self.get_argument('page', 0)
-        things = self.get_things(sort_type, page)
+        offset = int(self.get_argument('offset', 0))
+        things = self.get_things(sort_type, offset)
         self.render('things.html',
                     sort_type=sort_type,
                     user=user,
                     things=things,
                     title='酷客')
+
+    def post(self):
+        user = self.get_current_user()
+        sort_type = self.get_sort_type()
+        offset = int(self.get_argument('offset', 0))
+        logging.info('%s:%s', sort_type, str(offset))
+        things = self.get_things(sort_type, offset)
+        for thing in things:
+            thing['_id'] = str(thing['_id'])
+            del thing['image_ids']
+            del thing['date']
+
+        result = { 'error': '', 'things': things }
+        response_json = json_encode(result)
+        self.write(response_json)
 
 class ThingsCollectionHandler(base.BaseHandler):
     def get_things(self, page):

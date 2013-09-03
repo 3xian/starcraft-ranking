@@ -34,6 +34,7 @@
 				</div>
 			</div>
 			<div class="col-md-3">
+				{% if thing['price'] or thing['buylink'] %}
 				<div class="kuke-detail-actions">
 					{% if thing['price'] %}<div class="kuke-detail-price">¥ {{thing['price']}}</div>{% end %}
 					{% if thing['buylink'] %}
@@ -43,6 +44,7 @@
 					</a>
 					{% end %}
 				</div>
+				{% end %}
 				<div class="kuke-detail-actions">
 					{% if thing['favored'] %}
 					<div class="kuke-detail-act" id="actDisfavor">
@@ -84,7 +86,7 @@
 						<span class="glyphicon glyphicon-qrcode"></span> 分享到微信
 					</div>
 					{% if True %}
-					<div class="btn-group">
+					<div class="btn-group" style="margin-top:10px">
 						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 							管理员操作
 							<span class="caret"></span>

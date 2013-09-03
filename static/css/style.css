@@ -178,10 +178,9 @@ h1, h2, h3, h4 {
 	margin: 5px;
 }
 .kuke-detail-head>h2 {
-	font-size: 18px;
+	font-size: 17px;
 	color: #999;
 	margin-top: 15px;
-	margin-bottom: 20px;
 }
 .kuke-detail-actions {
 	border-top: 2px solid #F3F3F3;
@@ -197,8 +196,9 @@ h1, h2, h3, h4 {
 }
 .kuke-detail-act {
 	cursor: pointer;
-	margin-bottom: 8px;
+	margin-bottom: 12px;
 	color: gray;
+	font-family: "Hiragino Sans GB","Microsoft YaHei",Helvetica,sans-serif;
 }
 .kuke-detail-act:hover {
 	font-weight: bold;
@@ -213,7 +213,8 @@ h1, h2, h3, h4 {
 }
 .kuke-detail-desc {
 	border-left: 4px solid #DADADA;
-	padding: 3px 0 3px 12px;
+	padding: 10px 0 10px 12px;
+	margin: 8px 0;
 }
 .kuke-detail-buylink {
 	width: 65%;
@@ -237,6 +238,7 @@ h1, h2, h3, h4 {
 	margin-bottom: 10px;
 	border-top: 2px solid #F3F3F3;
 	padding-top: 15px;
+	font-family: "Hiragino Sans GB","Microsoft YaHei",Helvetica,sans-serif;
 }
 .kuke-detail-comments-head {
 	font-size: 20px;
@@ -256,6 +258,11 @@ h1, h2, h3, h4 {
 }
 #qrcodeLoading {
 	color: gray;
+}
+#noMoreTiles {
+	display: none;
+	text-align: center;
+	margin: 15px;
 }
 ul.nav li.dropdown:hover ul.dropdown-menu {
 	display: block;    
