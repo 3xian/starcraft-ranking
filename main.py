@@ -36,13 +36,19 @@ class Application(tornado.web.Application):
             (r'/things', ThingsHandler),
             (r'/things/collection', ThingsCollectionHandler),
             (r'/things/new', ThingsNewHandler),
+            (r'/things/update', ThingsUpdateHandler),
+            (r'/things/update/(.*)', ThingsUpdateHandler),
             (r'/things/collect', ThingsCollectHandler),
             (r'/things/favor', ThingsFavorHandler),
             (r'/things/image-upload', ThingsImageUploadHandler),
             (r'/things/detail/(.*)', ThingsDetailHandler),
             (r'/things/qrcode', ThingsQrcodeHandler),
+            (r'/things/remove', ThingsRemoveHandler),
+            (r'/things/permit', ThingsPermitHandler),
             (r'/users/messages', UsersMessagesHandler),
             (r'/users/logout', UsersLogoutHandler),
+            (r'/users/profile/(.*)', UsersProfileHandler),
+            (r'/admin/things', AdminThingsHandler),
             (r'/test', TestHandler),
         ]
         settings = dict(
@@ -88,7 +94,8 @@ class ThingsHandler(base.BaseHandler):
         self.render('things.html',
                     sort_type=sort_type,
                     user=user,
-                    things=things)
+                    things=things,
+                    title='酷客')
 
 class ThingsCollectionHandler(base.BaseHandler):
     def get_things(self, page):
@@ -103,7 +110,9 @@ class ThingsCollectionHandler(base.BaseHandler):
         user = self.get_current_user()
         page = self.get_argument('page', 0)
         things = self.get_things(page)
-        self.render_extend('things.html', things=things)
+        self.render_extend('things.html',
+                           things=things,
+                           title="收藏 - 酷客")
 
 class ThingsNewHandler(base.BaseHandler):
     @tornado.web.authenticated
@@ -121,11 +130,7 @@ class ThingsNewHandler(base.BaseHandler):
             price = self.get_argument('price')
             image_ids = self.get_list_argument('image_ids', ObjectId)
             desc = self.get_argument('desc')
-
-            logging.info('title: %s', title)
-            logging.info('desc: %s', desc)
-
-            thing_id = self.db.things.insert({
+            tid = self.db.things.insert({
                 'title': title,
                 'subtitle': subtitle,
                 'buylink': buylink,
@@ -139,7 +144,56 @@ class ThingsNewHandler(base.BaseHandler):
                 'user': self.current_user['uid'],
                 'auth': 0 
             })
-            response['thing_id'] = str(thing_id)
+            response['tid'] = str(tid)
+        except Exception, e:
+            logging.warning(e)
+            response['error'] = str(e)
+
+        response_json = json_encode(response)
+        self.write(response_json)
+
+class ThingsUpdateHandler(base.BaseHandler):
+    @tornado.web.authenticated
+    def get(self, tid):
+        thing = self.db.things.find_one({'_id': ObjectId(tid)})
+        if not thing:
+            raise tornado.web.HTTPError(404) 
+        self.render_extend('things_update.html', thing=thing)
+
+    @tornado.web.authenticated
+    def post(self):
+        response = {'error': ''}
+        try:
+            tid = self.get_argument('tid')
+            title = self.get_argument('title')
+            subtitle = self.get_argument('subtitle')
+            buylink = self.get_argument('buylink')
+            tags = self.get_list_argument('tags')
+            price = self.get_argument('price')
+            image_ids = self.get_list_argument('image_ids', ObjectId)
+            desc = self.get_argument('desc')
+
+            self.db.things.update(
+                    {
+                        '_id': ObjectId(tid)
+                    },
+                    {
+                        '$set':
+                        {
+                            'title': title,
+                            'subtitle': subtitle,
+                            'buylink': buylink,
+                            'tags': tags,
+                            'price': price,
+                            'desc': desc,
+                        },
+                        '$addToSet':
+                        {
+                            'image_ids': { '$each': image_ids }
+                        }
+                    }
+            )
+            response['tid'] = tid
         except Exception, e:
             logging.warning(e)
             response['error'] = str(e)
@@ -224,8 +278,8 @@ class ThingsDetailHandler(base.BaseHandler):
                               {'$inc': {'visit': 1}},
                               w=0)
 
-    def get(self, thing_id):
-        thing = self.db.things.find_one({'_id': ObjectId(thing_id)})
+    def get(self, tid):
+        thing = self.db.things.find_one({'_id': ObjectId(tid)})
         if not thing:
             raise tornado.web.HTTPError(404) 
         self.visit_plus(thing)
@@ -258,6 +312,37 @@ class ThingsQrcodeHandler(base.BaseHandler):
         fake_file.close()
         self.set_header('Content-Type', 'image/gif')
         self.write(response)
+
+class ThingsRemoveHandler(base.BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        response = {'error': ''}
+        try:
+            tid = ObjectId(self.get_argument('tid'))
+            self.db.users.update({'collect': tid},
+                                 {'$pull': {'collect': tid}})
+            self.db.users.update({'favor': tid},
+                                 {'$pull': {'favor': tid}})
+            self.db.things.remove({'_id': tid})
+        except Exception, e:
+            logging.warning(e)
+            response['error'] = str(e)
+        response_json = json_encode(response)
+        self.write(response_json)
+
+class ThingsPermitHandler(base.BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        response = {'error': ''}
+        try:
+            tid = ObjectId(self.get_argument('tid'))
+            self.db.things.update({'_id': tid},
+                                  {'$set': {'auth': 1}})
+        except Exception, e:
+            logging.warning(e)
+            response['error'] = str(e)
+        response_json = json_encode(response)
+        self.write(response_json)
 
 class AuthWeiboHandler(base.BaseHandler, auth.WeiboMixin):
     @tornado.web.asynchronous
@@ -304,6 +389,18 @@ class UsersLogoutHandler(base.BaseHandler):
     def get(self):
         self.clear_cookie('uid')
         self.redirect('/')
+
+class UsersProfileHandler(base.BaseHandler):
+    def get(self, uid):
+        # TODO
+        self.redirect('/')
+
+class AdminThingsHandler(base.BaseHandler):
+    @tornado.web.authenticated
+    def get(self):
+        things = list(self.db.things.find({'auth': 0}).sort('date', pymongo.DESCENDING))
+        self.render_extend('admin_things.html',
+                            things=things)
 
 class TestHandler(base.BaseHandler):
     def get_qrcode(self, data):

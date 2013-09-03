@@ -83,9 +83,21 @@
 					<div class="kuke-detail-act" id="actShareWechat" data-toggle="modal" href="#qrcodeModal">
 						<span class="glyphicon glyphicon-qrcode"></span> 分享到微信
 					</div>
+					{% if True %}
+					<div class="btn-group">
+						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+							管理员操作
+							<span class="caret"></span>
+						</button>
+						<ul class="dropdown-menu">
+							<li><a href="/things/update/{{thing['_id']}}">修改</a></li>
+							<li><a href="#" id="actRemove">删除</a></li>
+						</ul>
+					</div>
+					{% end %}
 				</div>
 				<div class="kuke-detail-actions">
-					<a href="/users/{{thing['user']['_id']}}">
+					<a href="/users/profile/{{thing['user']['_id']}}">
 						<img src="{{thing['user']['img_url']}}">
 						{{thing['user']['name']}}
 					</a>

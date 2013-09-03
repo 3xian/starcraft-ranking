@@ -245,6 +245,9 @@ h1, h2, h3, h4 {
 .kuke-detail-comments-head>.glyphicon {
 	margin-right: 6px;
 }
+.kuke-table {
+	background-color: white;
+}
 #actFavor, #actDisfavor {
 	color: rgb(197, 105, 76);
 }

@@ -108,21 +108,31 @@ thingsNew.submit = function() {
 	var newThingPrice = $("#newThingPrice").val();
 	var newThingDesc = this.editor.html();
 
-	$.post("/things/new", {
+	var url = "";
+	var tid = "";
+	if ($("#info").attr("tid")) {
+		url = "/things/update";
+		tid = $("#info").attr("tid");
+	} else {
+		url = "/things/new";
+	}
+
+	$.post(url, {
 		title: newThingTitle,
 		subtitle: newThingSubtitle,
 		buylink: newThingBuylink,
 		tags: newThingTags.toString(),
 		price: newThingPrice,
 		image_ids: thingsNew.imageIDs.toString(),
-		desc: newThingDesc
+		desc: newThingDesc,
+		tid: tid
 	}, function(msg) {
 		var response = JSON.parse(msg);
 		if (response.error) {
 			alert("发布失败");
 		} else {
 			alert("发布成功，请耐心等待管理员审核");
-			window.location = "/things/detail/" + response.thing_id;
+			window.location = "/things/detail/" + response.tid;
 		}
 	});
 };
@@ -155,7 +165,7 @@ thingsDetail.initCollect = function () {
 			window.location.reload();
 		});
 	});
-}
+};
 thingsDetail.initFavor = function () {
 	$("#actFavor").click(function() {
 		$.post("/things/favor", {
@@ -194,8 +204,9 @@ thingsDetail.init = function() {
 	}
 	$("#pikame").PikaChoose({
 		carousel: true,
-		transition:[0],
-		animationSpeed:200
+		transition: [0],
+		animationSpeed: 200,
+		speed: 10000
 	});
 	$("#actShareWechat").click(function() {
 		if (!thingsDetail.calledQrcode) {
@@ -211,13 +222,60 @@ thingsDetail.init = function() {
 			});
 		}
 	});
+	$("#actRemove").click(function() {
+		if (confirm("确定删除该产品？")) {
+			$.get("/things/remove", {
+				tid: $("#thingInfo").attr("tid")
+			}, function(msg) {
+				var response = JSON.parse(msg);
+				if (response.error) {
+					alert("删除失败");
+				}
+				window.location.href = "/";
+			});
+		}
+	});
 	this.initCollect();
 	this.initFavor();
-}
+};
+
+var admin = {};
+admin.init = function () {
+	if ($(".kuke-admin-permit-btn").length == 0) {
+		return false;
+	}
+	$(".kuke-admin-permit-btn").click(function() {
+		if (confirm("确定审核通过该产品？")) {
+			$.get("/things/permit", {
+				tid: $(this).attr("tid")
+			}, function(msg) {
+				var response = JSON.parse(msg);
+				if (response.error) {
+					alert("审核失败");
+				}
+				window.location.reload();
+			});
+		}
+	});
+	$(".kuke-admin-remove-btn").click(function() {
+		if (confirm("确定删除该产品？")) {
+			$.get("/things/remove", {
+				tid: $(this).attr("tid")
+			}, function(msg) {
+				var response = JSON.parse(msg);
+				if (response.error) {
+					alert("删除失败");
+				}
+				window.location.reload();
+			});
+		}
+	});
+};
 
 $(function() {
 	global.init();
 	things.init();
 	thingsDetail.init();
 	thingsNew.init();
+	admin.init();
 });

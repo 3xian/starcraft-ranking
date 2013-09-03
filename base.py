@@ -44,7 +44,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
     def gen_things_image_url(self, things):
         for thing in things:
-            if thing['image_ids']:
+            if thing.get('image_ids', None):
                 image_id = thing['image_ids'][0]
                 urls = self.image_urls([image_id])
                 thing['image_url'] = urls[0]
