@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}{{who['name']}} - 酷客{% end %}
+
+{% block content %}
+<div class="container">
+	<div class="kuke-user-head">
+		<h2>{{who['name']}}</h2>
+		<img src="{{who['img_url']}}">
+	</div>
+	<ul class="nav nav-tabs" style="clear:both">
+		<li class="active"><a href="#tabFavor" data-toggle="tab">赞</a></li>
+		<li><a href="#tabComment" data-toggle="tab">评论</a></li>
+	</ul>
+	<div class="tab-content kuke-tab-content">
+		<div class="tab-pane active" id="tabFavor">
+			{% for thing in things %}
+			<a type="button" class="btn btn-primary tips-sw" original-title="{{thing['subtitle']}}"
+				href="/things/detail/{{thing['_id']}}">{{thing['title']}}</a>
+			{% end %}
+		</div>
+		<div class="tab-pane kuke-user-comments" id="tabComment">
+			<ul>
+				{% for cmt in comments %}
+				<li>
+				<header>
+				<a href="/things/detail/{{cmt['tid']}}"
+					class="kuke-detail-name">[{{cmt['thing_name']}}]</a>
+					<span class="kuke-detail-time">{{cmt['date']}}</span>
+				</header>
+				<div>
+					<a href="/things/detail/{{cmt['tid']}}#comment_{{cmt['_id']}}">{{cmt['content']}}</a>
+				</div>
+				</li>
+				{% end %}
+			</ul>
+		</div>
+	</div>
+</div>
+{% end %}

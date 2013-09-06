@@ -310,4 +310,5 @@ $(function() {
 	thingsDetail.init();
 	thingsNew.init();
 	admin.init();
+    $('#myTab a:last').tab('show');
 });

@@ -24,12 +24,16 @@ class BaseHandler(tornado.web.RequestHandler):
         uid = self.get_secure_cookie('uid')
         if not uid:
             return None
-        return self.db.users.find_one({'uid':uid})
+        return self.db.users.find_one({'uid': uid})
 
-    def render_extend(self, template_name, user=None, sort_type=None, **args):
+    def is_admin(self):
+        return self.current_user # TODO
+
+    def render_extend(self, template_name, user=None, sort_type=None, subtitle=None, **args):
         if not user:
             user = self.current_user
-        self.render(template_name, user=user, sort_type=sort_type, **args)
+        self.render(template_name, user=user, sort_type=sort_type, is_admin=self.is_admin(),
+                    subtitle=subtitle, **args)
 
     def str_to_list(self, s, element_class=str):
         return [element_class(x.strip().encode('utf8')) for x in s.split(',') if x.strip()]

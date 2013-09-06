@@ -29,19 +29,43 @@
 				</div>
 				<div class="kuke-detail-comments">
 					<div class="kuke-detail-comments-head">评论</div>
+					<ul>
+					{% for cmt in comments %}
+					<li id="comment_{{cmt['_id']}}">
+					<div class="avatar">
+						<a href="/users/profile/{{cmt['from']}}">
+							<img src="{{cmt['from_img']}}">
+						</a>
+					</div>
+					<header>
+					<a class="kuke-detail-name" href="/users/profile/{{cmt['from']}}">{{cmt['from_name']}}</a>
+					<span class="kuke-detail-time">{{str(cmt['date']).split('.')[0]}}</span>
+					</header>
+					<section>
+					<p>{{cmt['content']}}</p>
+					</section>
+					</li>
+					{% end %}
+					</ul>
 					<form id="newComment" class="kuke-comment-form" action="/things/comments/new" method="post">
-						<p class="login_tip" style="display: none;">
-						需要您
-						<a href="#" class="btn btn-primary" data-toggle="modal" data-target="#login-modal">登录</a>
-						之后才可以进行回复
-						</p>
+						{% if not user %}
+						<p>需要您 <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">登录</a> 后才可以评论</p>
+						{% end %}
 						<div>
 							<input type="hidden" name="tid" value="{{thing['_id']}}">
-							<input type="hidden" name="to" value="-">
+							<input type="hidden" name="to" value="-" id="newCommentTo">
+							{% if user %}
 							<textarea class="form-control" name="content" rows="5" maxlength="300" required=""></textarea>
+							{% else %}
+							<textarea class="form-control" name="content" rows="5" maxlength="300" required="" disabled></textarea>
+							{% end %}
 							<p class="help-block">不超过300字</p>
 						</div>
+						{% if user %}
 						<button type="submit" class="btn btn-info">
+						{% else %}
+						<button type="submit" class="btn btn-info" disabled>
+						{% end %}
 							<span class="glyphicon glyphicon-comment"></span> 发布
 						</button>
 					</form>
@@ -65,7 +89,7 @@
 						{% else %}
 						<div class="kuke-detail-act hide" id="actDisfavor">
 							{% end %}
-							<span class="glyphicon glyphicon-thumbs-down"></span> 已赞（单击取消）
+							<span class="glyphicon glyphicon-thumbs-down"></span> 已赞 [取消]
 							<span class="label label-danger">
 								<span class="kuke-detail-favornum">{{thing['favor']}}</span>
 								人
@@ -86,7 +110,7 @@
 
 							{% if thing['collected'] %}
 							<div class="kuke-detail-act" id="actDiscollect">
-								<span class="glyphicon glyphicon-folder-close"></span> 已收藏（单击取消）
+								<span class="glyphicon glyphicon-folder-close"></span> 已收藏 [取消]
 							</div>
 							{% else %}
 							<div class="kuke-detail-act" id="actCollect">
@@ -99,7 +123,7 @@
 							<div class="kuke-detail-act" id="actShareWechat" data-toggle="modal" href="#qrcodeModal">
 								<span class="glyphicon glyphicon-qrcode"></span> 分享到微信
 							</div>
-							{% if True %}
+							{% if is_admin %}
 							<div class="btn-group" style="margin-top:10px">
 								<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
 									管理员操作
@@ -121,7 +145,7 @@
 						{% if thing['tags'] %}
 						<div class="kuke-detail-actions">
 							{% for tag in thing['tags'] %}
-							<span class="kuke-detail-tag">{{tag}}</span>
+							<a class="kuke-detail-tag" href="/things/find?tag={{tag}}">{{tag}}</a>
 							{% end %}
 						</div>
 						{% end %}

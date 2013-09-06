@@ -65,7 +65,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="/users/profile/{{user['_id']}}"><span class="glyphicon glyphicon-user kuke-glyphicon"></span> 个人主页</a></li>
 							<li><a href="/users/messages"><span class="glyphicon glyphicon-envelope kuke-glyphicon"></span> 消息</a></li>
-							{% if True %}
+							{% if is_admin %}
 							<li><a href="/admin/things" style="color:brown"><span class="glyphicon glyphicon-asterisk kuke-glyphicon"></span> 审核产品</a></li>
 							{% end %}
 							<li><a href="/users/logout"><span class="glyphicon glyphicon-remove-circle kuke-glyphicon"></span> 退出</a></li>
@@ -75,8 +75,8 @@
 						<li><a data-toggle="modal" href="#loginModal">登录</a></li>
 						{% end %}
 					</ul>
-					<form class="navbar-form navbar-right" role="search">
-						<input type="text" class="form-control kuke-form-control" placeholder="搜索">
+					<form class="navbar-form navbar-right" role="search" action="/things/find" method="get">
+						<input type="text" name="q" class="form-control kuke-form-control" placeholder="搜索">
 					</form>
 				</div>
 			</div>
