@@ -12,31 +12,67 @@
 	</head>
 
 	<body>
+		<div class="modal fade" id="XqkQrcodeModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">官方微信，扫一扫立即关注新奇资讯 ！</h4>
+					</div>
+					<div class="modal-body" style="text-align:center">
+						<div class="well"><img src="{{static_url('img/xqk-qrcode.jpg')}}"/></div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="modal" id="mobileNavbarModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">选择排序</h4>
+					</div>
+					<div class="modal-body" style="text-align:center">
+						<a class="btn btn-info" href="/things"><span class="glyphicon glyphicon-refresh kuke-glyphicon"></span> 最新</a>
+						<a class="btn btn-info" href="/things?sort=favor"><span class="glyphicon glyphicon-thumbs-up kuke-glyphicon"></span> 最赞</a>
+						<a class="btn btn-info" href="/things?sort=hot"><span  class="glyphicon glyphicon-fire kuke-glyphicon"></span> 最热</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<nav class="navbar navbar-fixed-top kuke-navbar" role="navigation">
 			<div class="container">
 				<div class="navbar-header">
-					<a class="navbar-brand kuke-navbar-brand" href="/">酷客!</a>
+				<!--<button type="button" class="navbar-toggle" id="mobileNavbarToggle" data-toggle="modal" href="#mobileNavbarModal"> -->
+				<button type="button" class="navbar-toggle" id="mobileNavbarToggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand kuke-navbar-brand" href="/">酷客!</a>
 				</div>
 				<div class="collapse navbar-collapse navbar-ex1-collapse">
 					<ul class="nav navbar-nav kuke-nav">
-						<li class="dropdown">
+						<li class="dropdown" id="sortType">
 							{% if sort_type == 'hot' %}
-							<a href="#" class="dropdown-toggle">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<span class="glyphicon glyphicon-fire kuke-glyphicon"></span>
 								最热 <b class="caret"></b>
 							</a>
 							{% elif sort_type == 'favor' %}
-							<a href="#" class="dropdown-toggle">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<span class="glyphicon glyphicon-thumbs-up kuke-glyphicon"></span>
 								最赞 <b class="caret"></b>
 							</a>
 							{% else %}
-							<a href="#" class="dropdown-toggle">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 								<span class="glyphicon glyphicon-refresh kuke-glyphicon"></span>
 								最新 <b class="caret"></b>
 							</a>
 							{% end %}
-							<ul class="dropdown-menu">
+							<ul class="dropdown-menu" style="z-index:99999">
 								<li><a href="/things"><span class="glyphicon glyphicon-refresh kuke-glyphicon"></span> 最新</a></li>
 								<li><a href="/things?sort=favor"><span class="glyphicon glyphicon-thumbs-up kuke-glyphicon"></span> 最赞</a></li>
 								<li><a href="/things?sort=hot"><span  class="glyphicon glyphicon-fire kuke-glyphicon"></span> 最热</a></li>
@@ -50,10 +86,17 @@
 						<li><a data-toggle="modal" href="#loginModal">发布产品</a></li>
 						{% end %}
 						<li class="dropdown">
-							<a data-toggle="modal" href="#loginModal">关注我们</a>
+							<a data-toggle="dropdown" class="dropdown-toggle" href="#">关注我们</a>
 							<ul class="dropdown-menu">
-								<li><a href="#">官方微博</a></li>
-								<li><a href="#">官方微信</a></li>
+								<li>
+									<a href="#">
+									<span class="glyphicon glyphicon-bullhorn kuke-glyphicon"></span>
+									官方微博</a>
+								</li>
+								<li><a href="#XqkQrcodeModal" data-toggle="modal">
+									<span class="glyphicon glyphicon-qrcode kuke-glyphicon"></span>
+									官方微信</a>
+								</li>
 							</ul>
 						</li>
 					</ul>

@@ -46,11 +46,35 @@ class BaseHandler(tornado.web.RequestHandler):
         images = list(self.db.images.find({'_id': {'$in': image_ids}}).sort('date', pymongo.DESCENDING))
         return [os.path.join('data', str(img['_id'])+img['ext']) for img in images]
 
+    def thumbnail_urls(self, image_ids):
+        images = list(self.db.images.find({'_id': {'$in': image_ids}}).sort('date', pymongo.DESCENDING))
+
+        urls = []
+        for img in images:
+            logging.info('OK: %s' %str(img))
+            if img.get('thumbnail', None) == 1:
+                suffix = '.min.png'
+            else:
+                suffix = img['ext']
+            urls.append(os.path.join('data', str(img['_id']) + suffix))
+
+        return urls
+
     def gen_things_image_url(self, things):
         for thing in things:
             if thing.get('image_ids', None):
                 image_id = thing['image_ids'][0]
                 urls = self.image_urls([image_id])
+                thing['image_url'] = urls[0]
+            else:
+                thing['image_url'] = 'http://www.baidu.com/img/bdlogo.gif'
+        return things
+
+    def gen_things_thumbnail_url(self, things):
+        for thing in things:
+            if thing.get('image_ids', None):
+                image_id = thing['image_ids'][0]
+                urls = self.thumbnail_urls([image_id])
                 thing['image_url'] = urls[0]
             else:
                 thing['image_url'] = 'http://www.baidu.com/img/bdlogo.gif'

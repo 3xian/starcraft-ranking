@@ -231,7 +231,7 @@ thingsDetail.initFavor = function () {
 	});
 }
 thingsDetail.init = function() {
-	if ($("#pikame").length == 0) {
+	if ($("#thingInfo").length == 0) {
 		return false;
 	}
 	$("#pikame").PikaChoose({

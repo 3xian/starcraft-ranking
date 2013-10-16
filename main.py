@@ -8,6 +8,7 @@ import re
 import StringIO
 from bson.objectid import ObjectId
 
+import Image
 import pymongo
 import qrcode
 import tornado.escape
@@ -86,7 +87,7 @@ class ThingsHandler(base.BaseHandler):
 
         things = list(self.db.things.find({'auth': 1}).sort(sort_key, pymongo.DESCENDING).\
                       skip(offset).limit(options.items_per_page))
-        things = self.gen_things_image_url(things)
+        things = self.gen_things_thumbnail_url(things)
         return things
 
     def get(self):
@@ -177,7 +178,8 @@ class ThingsNewHandler(base.BaseHandler):
             price = self.get_argument('price')
             image_ids = self.get_list_argument('image_ids', ObjectId)
             desc = self.get_argument('desc')
-            tid = self.db.things.insert({
+
+            thing_info = {
                 'title': title,
                 'subtitle': subtitle,
                 'buylink': buylink,
@@ -190,7 +192,10 @@ class ThingsNewHandler(base.BaseHandler):
                 'date': datetime.datetime.utcnow(),
                 'user': self.current_user['uid'],
                 'auth': 0 
-            })
+            }
+            logging.info('new thing: %s', str(thing_info))
+
+            tid = self.db.things.insert(thing_info)
             response['tid'] = str(tid)
         except Exception, e:
             logging.warning(e)
@@ -295,6 +300,19 @@ class ThingsFavorHandler(base.BaseHandler):
         self.write(response_json)
 
 class ThingsImageUploadHandler(base.BaseHandler):
+    def gen_thumbnail(self, image_id, image_body):
+        img = Image.open(StringIO.StringIO(image_body))
+        width, height = img.size
+        logging.info('image size: (%d, %d)' % (width, height))
+        if width > 300:
+            new_width = 300
+            new_height = height * new_width / width
+            logging.info('thumbnail size: (%d, %d)' % (new_width, new_height))
+            min_image_path = os.path.join(self.static_path('data'), str(image_id)+'.min.png')
+            img.resize((new_width, new_height)).save(min_image_path, 'JPEG')
+            self.db.images.update({'_id': image_id},
+                                  {'$set': {'thumbnail': 1}})
+
     @tornado.web.authenticated
     def post(self):
         image = self.request.files['file'][0]
@@ -302,12 +320,17 @@ class ThingsImageUploadHandler(base.BaseHandler):
         image_id = self.db.images.insert({
             'user': self.current_user['uid'],
             'ext': ext,
-            'date': datetime.datetime.utcnow()
+            'date': datetime.datetime.utcnow(),
+            'thumbnail': 0
         })
+
         if image_id:
             image_path = os.path.join(self.static_path('data'), str(image_id)+ext)
             with open(image_path, 'w') as fout:
                 fout.write(image['body'])
+
+            self.gen_thumbnail(image_id, image['body'])
+
             self.write(str(image_id))
         else:
             pass # TODO
