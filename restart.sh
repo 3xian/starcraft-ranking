@@ -1,8 +1,5 @@
-# Config
 run_cmd="python main.py"
-module_name="kuke"
-
-# Logic
+module_name="starcraft"
 pid_file=$module_name".pid"
 if [ -f ./$pid_file ]; then
 	pid=`cat $pid_file`
