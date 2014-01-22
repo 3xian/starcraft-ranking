@@ -1,7 +1,4 @@
-import logging
 import os
-
-import pymongo
 import tornado.web
 
 class SmartStaticFileHandler(tornado.web.StaticFileHandler):
