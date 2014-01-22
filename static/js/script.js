@@ -11,4 +11,10 @@ $(function() {
 		}
       });
 	});
+
+	$('#rollback').click(function() {
+		if (confirm("回滚需谨慎，真的确定吗？")) {
+			return true;
+		}
+	});
 });
