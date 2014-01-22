@@ -1,9 +1,0 @@
-Keke Website
-
-[Deployment Need]
-	python (2.7)
-	tornado (3.1)
-	mongodb
-	pymongo (2.5.2)
-	pil
-	pyqrcode
